@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="robots" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <title>後壁慢活行</title>
+ <title>後壁慢活行</title>
     <style>
         /* --- 全域設定 --- */
         body {
@@ -126,7 +126,7 @@
         .timeline-item { position: relative; display: flex; padding-bottom: 30px; }
         .time { width: 70px; text-align: right; padding-right: 20px; font-weight: 800; color: #e67e22; flex-shrink: 0; font-size: 1.1rem; padding-top: 4px; }
         .timeline-item::before { content: ''; position: absolute; left: 81px; top: 10px; bottom: -10px; width: 2px; background-color: #dcdcdc; }
-        .timeline-item:last-child::before { display: none; }
+        .timeline-item::last-child::before { display: none; }
         .timeline-item::after { content: ''; position: absolute; left: 76px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background-color: #3498db; border: 3px solid #f5f7fa; box-shadow: 0 0 0 1px #dcdcdc; z-index: 1; }
         .info { flex-grow: 1; background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-left: 15px; position: relative; }
         .info::before { content: ''; position: absolute; left: -8px; top: 12px; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-right: 8px solid white; }
@@ -146,35 +146,38 @@
 
 <div id="landing-page" class="fullscreen-page">
     <div class="landing-content">
-        <h1> 台南後壁之旅 </h1>
-        <p>2026過年之旅(2/19-2/21)</p>
-        <button id="go-btn" class="big-btn">粗發~台南 GO GO !</button>
+        <h1> 享受''南''得慵懶之旅 </h1>
+        <p>2026 農曆過年初三-初五</p>
+        <button id="go-btn" class="big-btn">粗發~台南 GO GO!!</button>
     </div>
 </div>
 
 <div id="menu-page" class="fullscreen-page">
     <div class="landing-content">
         <h1>🤫 噓！還沒出發喔</h1>
-        <p>現在是行前準備時間</p>
+        <p>現在是行前準備時間哦!!</p>
         
         <div id="countdown-box">
             距離粗發時間<br>
             還剩下 <span id="timer-text">計算中...</span>
         </div>
 
-        <button id="btn-prep" class="big-btn">📋 行前準備注意事項</button>
-        <button id="btn-peek" class="big-btn secondary">👀 我想要先偷偷瞇一下行程</button>
+        <button id="btn-prep" class="big-btn">📋 行李準備清單</button>
+        <button id="btn-peek" class="big-btn secondary">👀 我想要先偷偷...瞇一下行程</button>
     </div>
 </div>
 
 <div id="prep-page" class="fullscreen-page">
     <div class="prep-container">
-        <h2 class="prep-title">🎒 行前準備清單</h2>
+        <h2 class="prep-title">🎒 行李準備清單</h2>
         <ul class="prep-list">
-            <li>✅ <strong>證件類：</strong>身分證、健保卡、駕照</li>
-            <li>✅ <strong>衣物類：</strong>換洗衣物、薄外套(日夜溫差)、好走的鞋</li>
-            <li>✅ <strong>生活類：</strong>手機充電器、行動電源、個人藥品</li>
+            <li>✅ <strong>證件：</strong>65歲以上或國中以下請攜帶身分證or健保卡</li>
+            <li>✅ <strong>寵物：</strong>寵物尿布三天份、寵物食物</li>
+            <li>✅ <strong>重要!!：</strong>手機充電器、行動電源、個人藥品</li>
+            <li>✅ <strong>民宿不提供：</strong>牙刷、牙膏</li>
+            <li>✅ <strong>早晨必備：</strong>咖啡包、茶包、個人餐具</li>
             <li>✅ <strong>其他：</strong>雨傘/雨衣 (以防萬一)、愉快的心情！</li>
+            <li>⚠️ <strong>特別提醒：</strong>阿嬤的護腰、熱敷墊、食物剪刀。</li>
             <li>⚠️ <strong>特別提醒：</strong>出發前記得檢查車況、油箱加滿。</li>
         </ul>
         <div style="text-align: center;">
@@ -272,12 +275,42 @@
             icon: "🌾", 
             title: "享受'南'得慵懶的第一天",
             events: [
-                { time: "10:30", location: "台中粗發", note: "開車慢慢往南走", hideMap: true },
-                { time: "12:00", location: "田園秘境休閒咖啡果園", note: "午餐~秘境中的無菜單料理", image: "https://lh5.googleusercontent.com/p/AF1QipNq4yYv_7C_Xg_8X_7X_7X_7X_7X_7X_7X/w408-h306-k-no", desc: "秘境中的美食，享受田園風光。" },
-                { time: "13:30", location: "雅聞峇里海岸觀光工廠", note: "享受南洋度假風~峇里島風的悠閒" },
-                { time: "15:00", location: "失眠圖書館", note: "圖書館最終還是最適合治療失眠的地方" },
-                { time: "16:30", location: "菁寮老街", note: "百年歷史陳嘉玲的家" },
-                { time: "18:00", location: "好香麵食館(暫定)", note: "晚餐~粗粗呵呵" }
+                { time: "10:30", location: "台中粗發", note: "讓阿嬤睡飽再粗花~", hideMap: true },
+                { 
+                    time: "12:00", 
+                    location: "田園秘境休閒咖啡果園", 
+                    note: "午餐~秘境中的無菜單料理", 
+                    image: "https://www.taiwanfarm.org.tw/UploadImg/56/%E5%85%AD%E6%98%9F%E7%94%A2%E6%A5%AD4.jpg", 
+                    desc: "秘境不是白叫的，你開看看就''豬到''~隱藏在田園間的創意料理，老闆們跟在地的有機及有產銷履歷的小農們合作創造出安全的田園大食堂，提供美味的無菜單風味料理，在地在食從產地到餐桌，縮短食物旅程，讓大家吃到新鮮的美味！" 
+                },
+                { 
+                    time: "13:30", 
+                    location: "雅聞峇里海岸觀光工廠", 
+                    note: "享受南洋度假風~峇里島風的悠閒", 
+                    image: "https://photo.settour.com.tw/900x600/https://www.settour.com.tw/ss_img/info/location/YUN/N0/YUN0000021/YUN0000021_83964.jpg", 
+                    desc: "慵懶的行程怎麼能缺少像是南洋風格的地方呢? 享受小憩片刻的時光~沙灘躺椅，放空耍廢、悠閒放鬆的好地方。 賞花、賞植物、放小孩的電電電電電......" 
+                },
+                { 
+                    time: "15:00", 
+                    location: "失眠圖書館", 
+                    note: "圖書館最終還是最適合治療失眠的地方", 
+                    image: "https://scontent-tpe1-1.xx.fbcdn.net/v/t39.30808-6/540109644_1204580408354271_4020147034365964431_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=f727a1&_nc_ohc=bEOPBfwGtJoQ7kNvwEZh-Jw&_nc_oc=AdlJj3KgB7FLlSbwWH-bBQJXxrL3cSWUL4bVsQUGYJR1npVKMc0Lj0SwyceUZcdqHOw&_nc_zt=23&_nc_ht=scontent-tpe1-1.xx&_nc_gid=ymKNDQq-754SICT17V3mAQ&oh=00_Afrwd43SegkDW_vNz0iVkD-1hdkUAVA_FfmNVqMzEYXf-A&oe=6969539F", 
+                    desc: "老屋裡的書與夢 隱身於時光流轉的巷弄中，42年建築的歲月痕跡，融入閱讀、旅行與生活美學，打造一處讓人可以放慢步調、靜心閱讀、深度棲居的所在。" 
+                },
+                { 
+                    time: "16:30", 
+                    location: "菁寮老街", 
+                    note: "百年歷史陳嘉玲的家，體驗「稻稻來」的生活步調", 
+                    image: "https://ytimg.yam.com/images/article/20180601195656160.jpg", 
+                    desc: "清朝時，菁寮居民大量種植藍染植物「青仔」，同時蓋草寮為染坊，故名「菁寮」。當時因南北貨物往來熱絡，全盛時期發展成繁榮的聚落，但因鐵路通車和現代化取代了菁寮的重要性，而讓村落步向沒落。" 
+                },
+                { 
+                    time: "18:00", 
+                    location: "阿洲人蔘枸尾雞", 
+                    note: "晚餐~阿嬤尬大ㄍㄟ補幾類", 
+                    image: "https://foodintainan.com.tw/wp-content/uploads/2023/01/20230131132316_54.jpg", 
+                    desc: "30年老店的新營口袋名單，使用台灣人蔘之稱的''紅土狗尾草''與烏骨雞長時間的燉煮造就了清香甘甜的湯頭，整個溫暖大家的胃，狗尾草又能開脾、健胃、助消化、增進食慾，阿嬤尬大ㄍㄟ補嘴空阿~" 
+                }
             ]
         },
         {
@@ -285,12 +318,26 @@
             icon: "🚂",
             title: "享受'南'得慵懶的第二天",
             events: [
-                { time: "10:00", location: "烏樹林休閒園區", note: "ㄅㄨ~ㄅㄨ~頃嗆~頃嗆~" },
-                { time: "12:00", location: "弎弌-和茗園", note: "享受簡單慵懶的午餐時光" },
-                { time: "12:00", location: "富貴食堂", note: "古早味割稻飯" },
-                { time: "16:00", location: "失眠圖書館", note: "休息好好準備晚上的泡麵趴" },
-                { time: "17:00", location: "全聯福利中心 台南後壁店", note: "泡麵趴買起乃~" },
-                { time: "18:00", location: "懷舊泡麵趴", note: "有多久沒有大家一起吃泡麵的歡樂時光了呢?" }
+                { time: "11:20", location: "粗花", note: "享受過年期間唯一睡到飽的早晨", hideMap: true},
+                { time: "12:00", location: "弎弌-和茗園", note: "享受簡單慵懶的午餐時光", 
+                    image: "https://decing.tw/wp-content/uploads/20220908202325_23.jpg", 
+                    desc: "探訪台南新營百年日式老宅「本田三一宅」中的「弎弌-和茗園」。感受和風庭院、榻榻米座敷的靜謐，享受古早厝喝古樹茶的滋味、搭配上最簡單的日式麵食點心。"  },
+               { time: "14:00", location: "烏樹林休閒園區", note: "ㄅㄨ~ㄅㄨ~頃嗆~頃嗆~", 
+                    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRn0U70gvt1SoBorkv8whxBMmvMU0o_TBReHw&s", 
+                    desc: "慵懶除了吃還是要走個路，百年糖廠全新感受，藉著五分車在鐵道上慢慢地奔馳著，彷彿回到以前運送甘蔗的光景，吸收大樹的芬多精、吹著徐徐的微風，彷彿在提醒著我們即將上班了，該好好收心瞜!!"  },
+                { 
+                    time: "16:00", 
+                    location: "失眠圖書館", 
+                    note: "休息好好準備晚上的泡麵趴", 
+                    image: "https://scontent-tpe1-1.xx.fbcdn.net/v/t39.30808-6/540109644_1204580408354271_4020147034365964431_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=109&ccb=1-7&_nc_sid=f727a1&_nc_ohc=bEOPBfwGtJoQ7kNvwEZh-Jw&_nc_oc=AdlJj3KgB7FLlSbwWH-bBQJXxrL3cSWUL4bVsQUGYJR1npVKMc0Lj0SwyceUZcdqHOw&_nc_zt=23&_nc_ht=scontent-tpe1-1.xx&_nc_gid=ymKNDQq-754SICT17V3mAQ&oh=00_Afrwd43SegkDW_vNz0iVkD-1hdkUAVA_FfmNVqMzEYXf-A&oe=6969539F", 
+                    desc: "休息是為了走更長遠的路，繼續享受在書香與老宅氛圍中，體驗一段靜謐時光。閱讀不只是知識的入口，也是通往自我與世界更深沉的旅程。" 
+                },
+                { time: "17:00", location: "全聯福利中心 台南後壁店", note: "泡麵趴買起乃~", 
+                    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDvf2l1cDnahhimR0sUBMv0xcPNFioZOAB7A&s", 
+                    desc: "泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵~~~出來旅遊怎麼可以不粗泡麵捏~~~"  },
+                { time: "18:00", location: "懷舊泡麵趴", note: "有多久沒有大家一起吃泡麵的歡樂時光了呢?", 
+                    image: "https://down-tw.img.susercontent.com/file/sg-11134201-824in-mf55d395dk3w65_tn.webp", 
+                    desc: "近幾年的旅行總是遇到最大的困難，就是要吃泡麵卻吃不下了......每次的旅程總有一個微小的汙點，這次我們決定了!!!!! 人總是要向前進，要求進步，這次我們直接把泡麵當正餐!!! 泡麵趴~~泡麵趴~~凍蒜!! 凍蒜!! 請唯一支持泡麵趴(不支持也沒辦法，因為我已經排了)"  }
             ]
         },
         {
@@ -298,9 +345,16 @@
             icon: "🏠",
             title: "享受'南'得慵懶最後的時光",
             events: [
-                { time: "10:00", location: "烏樹林休閒園區", note: "搭乘糖廠五分車" },
-                { time: "12:30", location: "卡多利亞", note: "良食故事館午餐" },
-                { time: "15:00", location: "台中", note: "快樂賦歸", hideMap: true }
+                { time: "10:30", location: "緩慢退房", note: "在失眠圖書館享受最後的早晨與書香", 
+                    image: "https://scontent-tpe1-1.xx.fbcdn.net/v/t39.30808-6/583807608_1154119746907969_3337916709095787388_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=103&ccb=1-7&_nc_sid=833d8c&_nc_ohc=KEFex6rHA44Q7kNvwHzVb7Z&_nc_oc=Admnjsm9SjOWsBUZTBcnTaeU9ZYBiXuII9RmCrRGzceBu8mlTa_G1zNTKNjZ4DxLKkU&_nc_zt=23&_nc_ht=scontent-tpe1-1.xx&_nc_gid=h2fTPL4ri49vYeCHaTSL2w&oh=00_Afo_-OovR8cSzRW2QxP7dRGhUF2uNahKPL3rlezBT7S7Yg&oe=69695C46", 
+                    desc: "最後的慵懶快樂時光還是要好好的享受享受...活在當下、享受當時，過去了就回不去了", hideMap: true},
+                { time: "11:30", location: "還在想", note: "午餐", 
+                    image: "https://png.pngtree.com/element_our/20200701/ourmid/pngtree-hand-drawn-question-mark-villain-element-image_2277608.jpg", 
+                    desc: "想想看吃啥"  },
+                { time: "14:00", location: "綠金蕃茄南瓜農場", note: "全國唯一七彩百變南瓜隧道", 
+                    image: "https://imageapi.click2.travel/upload/turImageStock/80158/RGJ6S1GTV5CT.jpg", 
+                    desc: "體驗看看什麼叫做''坐火車巡田水''，七彩百變南瓜遂道~打造成夢幻藝術、彷佛走進奇特夢幻南瓜世界裡~搭乘小火車漫遊穿梭七彩百變南瓜隧道&欣賞300多種南瓜及高達7種顏色番茄"  },
+                { time: "15:00", location: "返回台中溫暖的家", note: "快樂的時光總是最快度過的! 再見了台南後壁", hideMap: true }
             ]
         }
     ];
@@ -389,4 +443,3 @@
 
 </body>
 </html>
-

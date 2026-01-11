@@ -14,171 +14,123 @@
             width: 100%; height: 100%;
         }
 
-        /* =========================================
-           1. 歡迎頁面 (Landing Page) - 無圖片版
-        ========================================= */
-        #landing-page {
+        /* 共用：全螢幕頁面樣式 (歡迎頁、選單、注意事項) */
+        .fullscreen-page {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            /* 改用漸層背景，不使用圖片，保證不會壞掉 */
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        /* 1. 歡迎頁面 */
+        #landing-page {
             background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            transition: opacity 0.8s, visibility 0.8s;
+        }
+        .landing-content { text-align: center; color: white; padding: 20px; }
+        .landing-content h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .landing-content p { font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9; }
+        
+        /* 大按鈕樣式 */
+        .big-btn {
+            background-color: #e67e22; color: white; border: 2px solid white;
+            padding: 15px 40px; font-size: 1.3rem; font-weight: bold;
+            border-radius: 50px; cursor: pointer; margin: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s;
+            width: 80%; max-width: 300px; display: block; /* 讓按鈕垂直排列 */
+        }
+        .big-btn:hover { transform: scale(1.05); background-color: #d35400; }
+        .big-btn.secondary { background-color: #34495e; border-color: #ecf0f1; } /* 第二顆按鈕換色 */
+
+        /* 2. 中間選單頁 (秘密基地) */
+        #menu-page {
+            background: linear-gradient(135deg, #16a085 0%, #f4d03f 100%); /* 不同的背景色 */
+            display: none; opacity: 0;
         }
 
-        .landing-content {
-            text-align: center;
-            color: white;
+        /* 3. 行前注意事項頁 */
+        #prep-page {
+            background-color: #fff;
+            color: #333;
+            display: none; opacity: 0;
+            justify-content: flex-start; /* 內容靠上 */
+            overflow-y: auto; /* 內容太長可捲動 */
             padding: 20px;
+            z-index: 10000; /* 比其他層更高 */
+        }
+        .prep-container {
+            max-width: 600px; width: 100%;
+            background: white; padding: 20px;
+            margin-top: 40px; margin-bottom: 40px;
+        }
+        .prep-title { color: #e67e22; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        .prep-list { text-align: left; line-height: 1.8; font-size: 1.1rem; }
+        .prep-list li { margin-bottom: 8px; }
+        .close-btn {
+            background: #95a5a6; color: white; border: none; padding: 10px 30px;
+            border-radius: 20px; font-size: 1rem; cursor: pointer; margin-top: 20px;
         }
 
-        .landing-content h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .landing-content p {
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-
-        #go-btn {
-            background-color: #e67e22; /* 亮橘色按鈕 */
-            color: white;
-            border: 2px solid white;
-            padding: 15px 50px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-        }
-        #go-btn:hover {
-            transform: scale(1.05); /* 滑鼠移上去放大 */
-            background-color: #d35400;
-        }
-
-        /* =========================================
-           2. 主程式 (Main App) - 包含時間軸
-        ========================================= */
-        #main-app {
-            display: none; /* 一開始隱藏，點 GO 才顯示 */
-            opacity: 0;
-            transition: opacity 1s;
-        }
-
-        header {
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px 10px;
-            text-align: center;
-        }
+        /* 4. 主行程表 (Main App) */
+        #main-app { display: none; opacity: 0; transition: opacity 1s; }
+        header { background-color: #2c3e50; color: white; padding: 20px 10px; text-align: center; }
         header h1 { margin: 0; font-size: 1.4rem; }
         .subtitle { font-size: 0.9rem; color: #bdc3c7; margin-top: 5px; }
 
-        /* 上方 Tab 選單 */
+        /* Tab 選單 */
         .tab-nav {
-            background: white;
-            display: flex;
-            justify-content: center;
-            padding: 12px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            background: white; display: flex; justify-content: center;
+            padding: 12px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 100;
         }
         .nav-btn {
-            background: none; border: none;
-            font-size: 1rem; color: #95a5a6;
-            cursor: pointer; padding: 8px 18px;
-            margin: 0 4px; border-radius: 20px;
-            transition: all 0.3s;
-            display: flex; align-items: center; font-weight: bold;
+            background: none; border: none; font-size: 1rem; color: #95a5a6;
+            cursor: pointer; padding: 8px 18px; margin: 0 4px; border-radius: 20px;
+            transition: all 0.3s; display: flex; align-items: center; font-weight: bold;
         }
         .nav-btn span { margin-right: 5px; font-size: 1.2rem; }
-        .nav-btn.active {
-            background-color: #3498db; color: white;
-            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.4);
-        }
+        .nav-btn.active { background-color: #3498db; color: white; box-shadow: 0 2px 5px rgba(52, 152, 219, 0.4); }
 
         .container { max-width: 800px; margin: 0 auto; padding: 20px 15px 50px 15px; }
-
-        /* 行程內容區塊 */
         .day-content { display: none; animation: fadeIn 0.5s; }
         .day-content.active { display: block; }
         .day-header {
             text-align: center; margin-bottom: 25px; padding: 15px;
             background: white; border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            border-left: 5px solid #3498db;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid #3498db;
         }
 
-        /* --- 時間軸樣式 (Timeline) --- */
-        .timeline-item {
-            position: relative;
-            display: flex;
-            padding-bottom: 30px; /* 行程間距 */
-        }
-
-        /* 左側時間 */
+        /* 時間軸樣式 */
+        .timeline-item { position: relative; display: flex; padding-bottom: 30px; }
         .time {
             width: 70px; text-align: right; padding-right: 20px;
             font-weight: 800; color: #e67e22; flex-shrink: 0;
             font-size: 1.1rem; padding-top: 4px;
         }
-
-        /* 中間的直線 */
         .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: 81px; /* 線的位置 */
-            top: 10px;
-            bottom: -10px;
-            width: 2px;
-            background-color: #dcdcdc; /* 灰色線條 */
+            content: ''; position: absolute; left: 81px; top: 10px; bottom: -10px;
+            width: 2px; background-color: #dcdcdc;
         }
-        /* 最後一個行程不畫線 */
         .timeline-item:last-child::before { display: none; }
-
-        /* 中間的圓點 */
         .timeline-item::after {
-            content: '';
-            position: absolute;
-            left: 76px; /* 圓點位置 */
-            top: 8px;
-            width: 12px; height: 12px;
-            border-radius: 50%;
-            background-color: #3498db;
-            border: 3px solid #f5f7fa;
-            box-shadow: 0 0 0 1px #dcdcdc;
-            z-index: 1;
+            content: ''; position: absolute; left: 76px; top: 8px;
+            width: 12px; height: 12px; border-radius: 50%;
+            background-color: #3498db; border: 3px solid #f5f7fa;
+            box-shadow: 0 0 0 1px #dcdcdc; z-index: 1;
         }
 
-        /* 右側卡片 */
+        /* 行程卡片 */
         .info {
-            flex-grow: 1;
-            background: white;
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-left: 15px;
-            position: relative;
+            flex-grow: 1; background: white; padding: 15px 20px;
+            border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-left: 15px; position: relative;
         }
-        /* 小箭頭 */
         .info::before {
             content: ''; position: absolute; left: -8px; top: 12px;
-            width: 0; height: 0;
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-            border-right: 8px solid white;
+            width: 0; height: 0; border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent; border-right: 8px solid white;
         }
-
         .location { font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; color: #2c3e50; }
         .note { font-size: 1rem; color: #666; margin-bottom: 10px; line-height: 1.5; }
         .btn-map {
@@ -187,23 +139,62 @@
             font-size: 0.9rem;
         }
 
+        /* 詳細圖文區樣式 */
+        .details-block {
+            margin-top: 15px; padding-top: 15px; border-top: 1px dashed #eee;
+            display: flex; gap: 15px;
+        }
+        .details-img {
+            width: 120px; height: 90px; object-fit: cover; border-radius: 8px; flex-shrink: 0;
+        }
+        .details-text { font-size: 0.95rem; color: #555; line-height: 1.6; text-align: justify; }
+        @media (max-width: 480px) {
+            .details-block { flex-direction: column; }
+            .details-img { width: 100%; height: auto; max-height: 200px; }
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div id="landing-page">
+<div id="landing-page" class="fullscreen-page">
     <div class="landing-content">
         <h1> 台南後壁之旅 </h1>
         <p>2026過年之旅(2/19-2/21)</p>
-        <button id="go-btn">粗發~台南 GO GO !</button>
+        <button id="go-btn" class="big-btn">粗發~台南 GO GO !</button>
+    </div>
+</div>
+
+<div id="menu-page" class="fullscreen-page">
+    <div class="landing-content">
+        <h1>🤫 噓！還沒出發喔</h1>
+        <p>現在是行前準備時間</p>
+        <button id="btn-prep" class="big-btn">📋 行前準備注意事項</button>
+        <button id="btn-peek" class="big-btn secondary">👀 我想要先偷偷瞇一下行程</button>
+    </div>
+</div>
+
+<div id="prep-page" class="fullscreen-page">
+    <div class="prep-container">
+        <h2 class="prep-title">🎒 行前準備清單</h2>
+        <ul class="prep-list">
+            <li>✅ <strong>證件類：</strong>身分證、健保卡、駕照</li>
+            <li>✅ <strong>衣物類：</strong>換洗衣物、薄外套(日夜溫差)、好走的鞋</li>
+            <li>✅ <strong>生活類：</strong>手機充電器、行動電源、個人藥品</li>
+            <li>✅ <strong>其他：</strong>雨傘/雨衣 (以防萬一)、愉快的心情！</li>
+            <li>⚠️ <strong>特別提醒：</strong>出發前記得檢查車況、油箱加滿。</li>
+        </ul>
+        <div style="text-align: center;">
+            <button id="btn-close-prep" class="close-btn">關閉</button>
+        </div>
     </div>
 </div>
 
 <div id="main-app">
     <header>
         <h1>🌾 後壁俗女慢活行</h1>
-        <div class="subtitle">2026.02.19 - 2026.02.21</div>
+        <div class="subtitle">2025.12.29 - 2025.12.31</div>
     </header>
 
     <nav class="tab-nav" id="nav-container"></nav>
@@ -211,34 +202,87 @@
 </div>
 
 <script>
-    // --- 腳本區 ---
-    
-    // 1. 處理 GO 按鈕點擊
+    // === 設定變數 ===
+    // ★ 設定解鎖時間：2026年2月19日 上午 10:30
+    var targetDate = new Date('2026-02-19T10:30:00');
+
+    // 取得頁面元素
+    var landingPage = document.getElementById('landing-page');
+    var menuPage = document.getElementById('menu-page');
+    var prepPage = document.getElementById('prep-page');
+    var mainApp = document.getElementById('main-app');
+
+    // === 1. 點擊 GO 按鈕的邏輯 ===
     document.getElementById('go-btn').onclick = function() {
-        var landing = document.getElementById('landing-page');
-        var app = document.getElementById('main-app');
+        var now = new Date(); // 取得現在時間
 
-        // 淡出歡迎頁
-        landing.style.opacity = '0';
-        landing.style.visibility = 'hidden';
-
-        // 顯示主程式
-        app.style.display = 'block';
-        // 稍微延遲讓透明度動畫生效
-        setTimeout(function(){
-            app.style.opacity = '1';
-        }, 50);
+        // 判斷：現在時間 是否已經超過 目標時間？
+        if (now >= targetDate) {
+            // A. 時間到了 (2/19 10:30 以後)：直接進入行程
+            goToItinerary();
+        } else {
+            // B. 時間還沒到：進入「秘密選單」
+            landingPage.style.opacity = '0';
+            landingPage.style.visibility = 'hidden';
+            
+            menuPage.style.display = 'flex';
+            setTimeout(function(){ menuPage.style.opacity = '1'; }, 50);
+        }
     };
 
-    // 2. 行程資料
+    // === 2. 秘密選單按鈕功能 ===
+    
+    // 按鈕 A：行前準備
+    document.getElementById('btn-prep').onclick = function() {
+        prepPage.style.display = 'flex';
+        setTimeout(function(){ prepPage.style.opacity = '1'; }, 50);
+    };
+
+    // 關閉行前準備
+    document.getElementById('btn-close-prep').onclick = function() {
+        prepPage.style.opacity = '0';
+        setTimeout(function(){ prepPage.style.display = 'none'; }, 500);
+    };
+
+    // 按鈕 B：偷偷瞇一下 (進入行程)
+    document.getElementById('btn-peek').onclick = function() {
+        // 隱藏選單，顯示主行程
+        menuPage.style.opacity = '0';
+        setTimeout(function(){ 
+            menuPage.style.display = 'none'; 
+            goToItinerary(); // 呼叫進入行程函式
+        }, 500);
+    };
+
+    // === 3. 進入行程表的共用函式 ===
+    function goToItinerary() {
+        landingPage.style.opacity = '0';
+        landingPage.style.visibility = 'hidden';
+        
+        mainApp.style.display = 'block';
+        setTimeout(function(){ mainApp.style.opacity = '1'; }, 50);
+    }
+
+    // === 4. 行程資料 (保持不變) ===
     var itineraryData = [
         {
             dayLabel: "Day 1",
             icon: "🌾", 
             title: "享受'南'得慵懶的第一天",
             events: [
-                { time: "10:30", location: "台中粗發", note: "開車慢慢往南走" },
-                { time: "12:00", location: "田園秘境休閒咖啡果園", note: "午餐~秘境中的無菜單料理" },
+                { 
+                    time: "10:30", 
+                    location: "台中粗發", 
+                    note: "開車慢慢往南走", 
+                    hideMap: true
+                },
+                { 
+                    time: "12:00", 
+                    location: "田園秘境休閒咖啡果園", 
+                    note: "午餐~秘境中的無菜單料理",
+                    image: "https://lh5.googleusercontent.com/p/AF1QipNq4yYv_7C_Xg_8X_7X_7X_7X_7X_7X_7X/w408-h306-k-no", // 範例圖
+                    desc: "秘境中的美食，享受田園風光。"
+                },
                 { time: "13:30", location: "雅聞峇里海岸觀光工廠", note: "享受南洋度假風~峇里島風的悠閒" },
                 { time: "15:00", location: "失眠圖書館", note: "圖書館最終還是最適合治療失眠的地方" },
                 { time: "16:30", location: "菁寮老街", note: "百年歷史陳嘉玲的家" },
@@ -252,7 +296,6 @@
             events: [
                 { time: "10:00", location: "烏樹林休閒園區", note: "ㄅㄨ~ㄅㄨ~頃嗆~頃嗆~" },
                 { time: "12:00", location: "弎弌-和茗園", note: "享受簡單慵懶的午餐時光" },
-                { time: "13:00", location: "還想不到", note: "古早味割稻飯" },
                 { time: "12:00", location: "富貴食堂", note: "古早味割稻飯" },
                 { time: "16:00", location: "失眠圖書館", note: "休息好好準備晚上的泡麵趴" },
                 { time: "17:00", location: "全聯福利中心 台南後壁店", note: "泡麵趴買起乃~" },
@@ -266,35 +309,27 @@
             events: [
                 { time: "10:00", location: "烏樹林休閒園區", note: "搭乘糖廠五分車" },
                 { time: "12:30", location: "卡多利亞", note: "良食故事館午餐" },
-                { time: "15:00", location: "台中", note: "快樂賦歸" }
+                { time: "15:00", location: "台中", note: "快樂賦歸", hideMap: true }
             ]
         }
     ];
 
-    // 3. 產生行程表函式
     function init() {
         var mainContainer = document.getElementById('main-container');
         var navContainer = document.getElementById('nav-container');
-
         mainContainer.innerHTML = "";
         navContainer.innerHTML = "";
 
         for (var i = 0; i < itineraryData.length; i++) {
             var dayData = itineraryData[i];
             
-            // 建立上方按鈕
             var btn = document.createElement('button');
             btn.className = 'nav-btn';
             if (i === 0) btn.className += ' active';
             btn.innerHTML = '<span>' + dayData.icon + '</span>' + dayData.dayLabel;
-            
-            // 使用閉包處理點擊事件
-            (function(idx) {
-                btn.onclick = function() { switchTab(idx); };
-            })(i);
+            (function(idx) { btn.onclick = function() { switchTab(idx); }; })(i);
             navContainer.appendChild(btn);
 
-            // 建立內容區塊
             var dayDiv = document.createElement('div');
             dayDiv.className = 'day-content';
             if (i === 0) dayDiv.className += ' active';
@@ -304,50 +339,53 @@
 
             for (var j = 0; j < dayData.events.length; j++) {
                 var event = dayData.events[j];
-                // Google Map 連結拼接
                 var mapLink = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(event.location);
 
                 htmlContent += '<div class="timeline-item">';
                 htmlContent += '<div class="time">' + event.time + '</div>';
                 
-                // CSS 會負責畫出直線與圓點
-                
                 htmlContent += '<div class="info">';
                 htmlContent += '<div class="location">' + event.location + '</div>';
                 htmlContent += '<div class="note">' + event.note + '</div>';
-                htmlContent += '<a href="' + mapLink + '" target="_blank" class="btn-map">📍 導航</a>';
+                
+                if (!event.hideMap) {
+                    htmlContent += '<a href="' + mapLink + '" target="_blank" class="btn-map">📍 導航</a>';
+                }
+
+                if (event.image || event.desc) {
+                    htmlContent += '<div class="details-block">';
+                    if (event.image) {
+                        htmlContent += '<img src="' + event.image + '" class="details-img">';
+                    }
+                    if (event.desc) {
+                        htmlContent += '<div class="details-text">' + event.desc + '</div>';
+                    }
+                    htmlContent += '</div>';
+                }
+                
                 htmlContent += '</div>'; // end info
                 htmlContent += '</div>'; // end timeline-item
             }
-
             dayDiv.innerHTML = htmlContent;
             mainContainer.appendChild(dayDiv);
         }
     }
 
-    // 4. 切換頁籤函式
     function switchTab(index) {
         var allContents = document.querySelectorAll('.day-content');
         var allBtns = document.querySelectorAll('.nav-btn');
-
         for (var k = 0; k < allContents.length; k++) {
             allContents[k].style.display = 'none';
             allContents[k].classList.remove('active');
             allBtns[k].classList.remove('active');
         }
-
         allContents[index].style.display = 'block';
         setTimeout(function(){ allContents[index].classList.add('active'); }, 10);
         allBtns[index].classList.add('active');
     }
 
-    // 5. 啟動
-    window.onload = function() {
-        init();
-    };
-
+    window.onload = function() { init(); };
 </script>
 
 </body>
 </html>
-

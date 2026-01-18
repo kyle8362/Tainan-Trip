@@ -350,8 +350,8 @@
                     desc: "最後的慵懶快樂時光還是要好好的享受享受...活在當下、享受當時，過去了就回不去了", hideMap: true},
                 { time: "11:30", location: "打貓廚房", note: "午餐~Hit Cat Kitchen", 
                     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9sSJ9cqB94aIuNOzkVXVQQYohRuqXNLzRSA&s", 
-                    desc: "嘉義民雄古地名「打猫」,此店象徵民雄人們對土地的敬意與初心不變的堅持。
-老闆利用當地原汁原味地食材創造的美式料理,不只是餐廳,更是一間融合美食與餐酒文化的全新型態的美式餐酒館，在此趟享受''南''得慵懶的最後一餐就讓我們一起探索民雄的美式靈魂與手作溫度的饗宴吧。"  },
+                    // ★ 這裡我幫您把斷行修復接在一起了！
+                    desc: "嘉義民雄古地名「打猫」,此店象徵民雄人們對土地的敬意與初心不變的堅持。老闆利用當地原汁原味地食材創造的美式料理,不只是餐廳,更是一間融合美食與餐酒文化的全新型態的美式餐酒館，在此趟享受''南''得慵懶的最後一餐就讓我們一起探索民雄的美式靈魂與手作溫度的饗宴吧。"  },
                 { time: "14:00", location: "綠金蕃茄南瓜農場", note: "全國唯一七彩百變南瓜隧道", 
                     image: "https://imageapi.click2.travel/upload/turImageStock/80158/RGJ6S1GTV5CT.jpg", 
                     desc: "體驗看看什麼叫做''坐火車巡田水''，七彩百變南瓜遂道~打造成夢幻藝術、彷佛走進奇特夢幻南瓜世界裡~搭乘小火車漫遊穿梭七彩百變南瓜隧道&欣賞300多種南瓜及高達7種顏色番茄"  },
@@ -386,6 +386,7 @@
 
             for (var j = 0; j < dayData.events.length; j++) {
                 var event = dayData.events[j];
+                // 使用官方 HTTPS 連結
                 var mapLink = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(event.location);
 
                 htmlContent += '<div class="timeline-item">';
@@ -438,6 +439,11 @@
         setTimeout(function(){ allContents[index].classList.add('active'); }, 10);
         allBtns[index].classList.add('active');
     }
+
+    // 錯誤偵測 (萬一有其他語法錯誤，至少知道哪裡壞了)
+    window.onerror = function(message) {
+        alert("網頁發生錯誤：" + message);
+    };
 
     window.onload = function() { init(); };
 </script>

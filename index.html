@@ -28,16 +28,36 @@
         #landing-page {
             background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
         }
-        .landing-content { text-align: center; color: white; padding: 20px; }
-        .landing-content h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .landing-content { 
+            text-align: center; 
+            color: white; 
+            padding: 20px; 
+            width: 100%; /* 確保內容區塊寬度足夠 */
+            box-sizing: border-box;
+        }
+        .landing-content h1 { 
+            font-size: 2.5rem; 
+            margin-bottom: 10px; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            /* ★ 修改點 1：強制不換行 */
+            white-space: nowrap; 
+        }
         .landing-content p { font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9; }
         
+        /* 手機版字體縮小，避免不換行導致凸出畫面 */
+        @media (max-width: 480px) {
+            .landing-content h1 { font-size: 1.6rem; } 
+        }
+
+        /* 按鈕樣式 */
         .big-btn {
             background-color: #e67e22; color: white; border: 2px solid white;
             padding: 15px 40px; font-size: 1.3rem; font-weight: bold;
-            border-radius: 50px; cursor: pointer; margin: 10px;
+            border-radius: 50px; cursor: pointer; 
+            /* ★ 修改點 1 & 2：設定 auto 讓它左右置中 */
+            margin: 15px auto; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s;
-            width: 80%; max-width: 300px; display: block;
+            width: 80%; max-width: 300px; display: block; /* display block + margin auto 達成置中 */
         }
         .big-btn:hover { transform: scale(1.05); background-color: #d35400; }
         .big-btn.secondary { background-color: #34495e; border-color: #ecf0f1; }
@@ -47,16 +67,19 @@
             background: linear-gradient(135deg, #16a085 0%, #f4d03f 100%);
             display: none; opacity: 0;
         }
+        /* 倒數計時樣式 */
         #countdown-box {
             background: rgba(0, 0, 0, 0.2);
             padding: 10px 20px;
             border-radius: 10px;
-            margin-bottom: 30px;
+            /* ★ 修改點 2：確保倒數計時框也置中 */
+            margin: 0 auto 30px auto; 
             color: white;
             font-size: 1.1rem;
             font-weight: bold;
             letter-spacing: 1px;
             border: 1px solid rgba(255,255,255,0.3);
+            display: inline-block; /* 讓 margin auto 生效 */
         }
 
         /* 3. 行前注意事項頁 */
@@ -88,33 +111,26 @@
         header h1 { margin: 0; font-size: 1.4rem; }
         .subtitle { font-size: 0.9rem; color: #bdc3c7; margin-top: 5px; }
 
-        /* --- Tab 選單樣式優化 --- */
+        /* Tab 選單 */
         .tab-nav {
             background: white; display: flex; justify-content: center;
             padding: 12px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             position: sticky; top: 0; z-index: 100;
-            flex-wrap: wrap; /* ★關鍵：允許換行，手機不會被切掉 */
+            flex-wrap: wrap; 
         }
         .nav-btn {
             background: none; border: none; font-size: 1rem; color: #95a5a6;
-            cursor: pointer; padding: 8px 15px; margin: 3px; /* 稍微增加間距 */
+            cursor: pointer; padding: 8px 15px; margin: 3px;
             border-radius: 20px; transition: all 0.3s;
             display: flex; align-items: center; font-weight: bold; white-space: nowrap;
         }
-        
-        /* 手機版特別調整：字變小一點，排版更緊湊 */
         @media (max-width: 480px) {
             .nav-btn {
-                font-size: 0.9rem;
-                padding: 6px 12px;
-                flex-grow: 1; /* 讓按鈕平均撐開 */
-                justify-content: center;
+                font-size: 0.9rem; padding: 6px 12px; flex-grow: 1; justify-content: center;
             }
         }
-
         .nav-btn span { margin-right: 5px; font-size: 1.2rem; }
         .nav-btn.active { background-color: #3498db; color: white; box-shadow: 0 2px 5px rgba(52, 152, 219, 0.4); }
-        
         .nav-btn.special-btn { color: #e67e22; border: 1px solid #e67e22; }
         .nav-btn.special-btn:hover { background-color: #e67e22; color: white; }
 
@@ -130,7 +146,7 @@
         .timeline-item { position: relative; display: flex; padding-bottom: 30px; }
         .time { width: 70px; text-align: right; padding-right: 20px; font-weight: 800; color: #e67e22; flex-shrink: 0; font-size: 1.1rem; padding-top: 4px; }
         .timeline-item::before { content: ''; position: absolute; left: 81px; top: 10px; bottom: -10px; width: 2px; background-color: #dcdcdc; }
-        .timeline-item:last-child::before { display: none; }
+        .timeline-item::last-child::before { display: none; }
         .timeline-item::after { content: ''; position: absolute; left: 76px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background-color: #3498db; border: 3px solid #f5f7fa; box-shadow: 0 0 0 1px #dcdcdc; z-index: 1; }
         
         .info { flex-grow: 1; background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-left: 15px; position: relative; }
@@ -151,7 +167,7 @@
 
 <div id="landing-page" class="fullscreen-page">
     <div class="landing-content">
-        <h1> 享受''南''得慵懶之旅 </h1>
+        <h1>享受''南''得慵懶之旅</h1>
         <p>2026 農曆過年初三-初五</p>
         <button id="go-btn" class="big-btn">粗發~台南 GO GO!!</button>
     </div>
@@ -293,7 +309,6 @@
                     time: "15:00", 
                     location: "失眠圖書館", 
                     note: "圖書館最終還是最適合治療失眠的地方", 
-                    // ★ 圖片已換成公開的 Unsplash 示意圖，確保能顯示 (FB連結不穩)
                     image: "https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=600&auto=format&fit=crop", 
                     desc: "老屋裡的書與夢 隱身於時光流轉的巷弄中，42年建築的歲月痕跡，融入閱讀、旅行與生活美學，打造一處讓人可以放慢步調、靜心閱讀、深度棲居的所在。" 
                 },
@@ -335,9 +350,15 @@
                 { time: "17:00", location: "全聯福利中心 台南後壁店", note: "泡麵趴買起乃~", 
                     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDvf2l1cDnahhimR0sUBMv0xcPNFioZOAB7A&s", 
                     desc: "泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵泡麵~~~出來旅遊怎麼可以不粗泡麵捏~~~"  },
-                { time: "18:00", location: "懷舊泡麵趴", note: "有多久沒有大家一起吃泡麵的歡樂時光了呢?", 
+                { 
+                    time: "18:00", 
+                    location: "懷舊泡麵趴", 
+                    // ★ 修改點 4：設定 address 屬性，指定導航到特定地址
+                    address: "731臺南市後壁區142-1號",
+                    note: "有多久沒有大家一起吃泡麵的歡樂時光了呢?", 
                     image: "https://down-tw.img.susercontent.com/file/sg-11134201-824in-mf55d395dk3w65_tn.webp", 
-                    desc: "近幾年的旅行總是遇到最大的困難，就是要吃泡麵卻吃不下了......每次的旅程總有一個微小的汙點，這次我們決定了!!!!! 人總是要向前進，要求進步，這次我們直接把泡麵當正餐!!! 泡麵趴~~泡麵趴~~凍蒜!! 凍蒜!! 請唯一支持泡麵趴(不支持也沒辦法，因為我已經排了)"  }
+                    desc: "近幾年的旅行總是遇到最大的困難，就是要吃泡麵卻吃不下了......每次的旅程總有一個微小的汙點，這次我們決定了!!!!! 人總是要向前進，要求進步，這次我們直接把泡麵當正餐!!! 泡麵趴~~泡麵趴~~凍蒜!! 凍蒜!! 請唯一支持泡麵趴(不支持也沒辦法，因為我已經排了)"  
+                }
             ]
         },
         {
@@ -345,12 +366,17 @@
             icon: "🏠",
             title: "享受'南'得慵懶最後的時光",
             events: [
-                { time: "10:30", location: "緩慢退房", note: "在失眠圖書館享受最後的早晨與書香", 
-                    image: "https://scontent-tpe1-1.xx.fbcdn.net/v/t39.30808-6/583807608_1154119746907969_3337916709095787388_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=103&ccb=1-7&_nc_sid=833d8c&_nc_ohc=KEFex6rHA44Q7kNvwHzVb7Z&_nc_oc=Admnjsm9SjOWsBUZTBcnTaeU9ZYBiXuII9RmCrRGzceBu8mlTa_G1zNTKNjZ4DxLKkU&_nc_zt=23&_nc_ht=scontent-tpe1-1.xx&_nc_gid=h2fTPL4ri49vYeCHaTSL2w&oh=00_Afo_-OovR8cSzRW2QxP7dRGhUF2uNahKPL3rlezBT7S7Yg&oe=69695C46", 
-                    desc: "最後的慵懶快樂時光還是要好好的享受享受...活在當下、享受當時，過去了就回不去了", hideMap: true},
+                { 
+                    time: "10:30", 
+                    location: "緩慢退房", 
+                    note: "在失眠圖書館享受最後的早晨與書香", 
+                    // ★ 修改點 3：照片換成跟 Day 1 失眠圖書館一樣
+                    image: "https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=600&auto=format&fit=crop", 
+                    desc: "最後的慵懶快樂時光還是要好好的享受享受...活在當下、享受當時，過去了就回不去了", 
+                    hideMap: true
+                },
                 { time: "11:30", location: "打貓廚房", note: "午餐~Hit Cat Kitchen", 
                     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9sSJ9cqB94aIuNOzkVXVQQYohRuqXNLzRSA&s", 
-                    // ★ 修正了這裡的斷行問題
                     desc: "嘉義民雄古地名「打猫」,此店象徵民雄人們對土地的敬意與初心不變的堅持。老闆利用當地原汁原味地食材創造的美式料理,不只是餐廳,更是一間融合美食與餐酒文化的全新型態的美式餐酒館，在此趟享受''南''得慵懶的最後一餐就讓我們一起探索民雄的美式靈魂與手作溫度的饗宴吧。"  },
                 { time: "14:00", location: "綠金蕃茄南瓜農場", note: "全國唯一七彩百變南瓜隧道", 
                     image: "https://imageapi.click2.travel/upload/turImageStock/80158/RGJ6S1GTV5CT.jpg", 
@@ -385,7 +411,9 @@
 
             for (var j = 0; j < dayData.events.length; j++) {
                 var event = dayData.events[j];
-                var mapLink = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(event.location);
+                // ★ 修改程式邏輯：如果有 address 就用 address，沒有就用 location
+                var query = event.address ? event.address : event.location;
+                var mapLink = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(query);
 
                 htmlContent += '<div class="timeline-item">';
                 htmlContent += '<div class="time">' + event.time + '</div>';

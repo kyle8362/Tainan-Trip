@@ -12,9 +12,8 @@
             background-color: #f5f7fa;
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            /* 防止 iOSSafari 左右滑動 */
             overflow-x: hidden; 
-            -webkit-tap-highlight-color: transparent; /* 移除點擊時的藍色高亮框 */
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* 共用：全螢幕頁面樣式 */
@@ -27,13 +26,13 @@
             transition: opacity 0.8s, visibility 0.8s;
         }
 
-        /* 1. 歡迎頁面 (過年配色) */
+        /* 1. 歡迎頁面 */
         #landing-page {
             background: linear-gradient(135deg, #2c3e50 0%, #a04000 100%);
             overflow: hidden;
         }
         
-        /* 過年裝飾 (燈籠) */
+        /* 過年裝飾 */
         .cny-decoration {
             position: absolute;
             top: -20px;
@@ -61,43 +60,21 @@
             z-index: 1;
         }
 
-        /* === 標題大改造 (三行式 - 手機版優化) === */
+        /* 標題樣式 */
         .title-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 30px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 30px;
         }
-
         .title-line-1 {
-            font-size: 3.5rem; 
-            font-weight: 900;
-            color: #ecf0f1;
-            letter-spacing: 5px;
-            margin-bottom: -15px; 
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-            transform: translateX(-60px); 
+            font-size: 3.5rem; font-weight: 900; color: #ecf0f1; letter-spacing: 5px; margin-bottom: -15px; 
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3); transform: translateX(-60px); 
         }
-
         .title-line-2 {
-            font-size: 6rem; 
-            font-weight: 900;
-            color: #f1c40f; 
+            font-size: 6rem; font-weight: 900; color: #f1c40f; 
             text-shadow: 4px 4px 0px #c0392b, 8px 8px 15px rgba(0,0,0,0.5);
-            line-height: 1.2;
-            margin: 5px 0;
-            font-family: "KaiTi", "BiauKai", serif; 
-            transform: rotate(-3deg);
+            line-height: 1.2; margin: 5px 0; font-family: "KaiTi", "BiauKai", serif; transform: rotate(-3deg);
         }
-
         .title-line-3 {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #ecf0f1;
-            letter-spacing: 3px;
-            margin-top: -5px;
-            transform: translateX(60px);
+            font-size: 1.8rem; font-weight: bold; color: #ecf0f1; letter-spacing: 3px; margin-top: -5px; transform: translateX(60px);
         }
 
         @media (max-width: 480px) {
@@ -107,29 +84,19 @@
         }
 
         .landing-content p { 
-            font-size: 1.1rem; 
-            margin-bottom: 40px; 
-            opacity: 0.8; 
-            margin-top: 30px; 
-            background: rgba(0,0,0,0.2);
-            padding: 5px 15px;
-            border-radius: 20px;
-            display: inline-block;
+            font-size: 1.1rem; margin-bottom: 40px; opacity: 0.8; margin-top: 30px; 
+            background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 20px; display: inline-block;
         }
         
         /* 圓形按鈕 */
         #go-btn {
-            width: 140px; height: 140px;
-            border-radius: 50%;
+            width: 140px; height: 140px; border-radius: 50%;
             background-color: #e67e22; color: white; border: 4px solid #f1c40f; 
             font-weight: bold; cursor: pointer; margin: 0 auto; 
             box-shadow: 0 0 20px rgba(230, 126, 34, 0.6); 
             transition: all 0.3s;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            line-height: 1.3;
-            animation: pulse 2s infinite;
-            /* ★ 修改 2：優化觸控反應 */
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            line-height: 1.3; animation: pulse 2s infinite;
             touch-action: manipulation;
         }
         
@@ -153,9 +120,7 @@
         }
         
         #countdown-box {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 10px 20px;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2); padding: 10px 20px; border-radius: 10px;
             display: table; margin: 15px auto 30px auto; 
             color: white; font-size: 1.1rem; font-weight: bold; letter-spacing: 1px;
             border: 1px solid rgba(255,255,255,0.3);
@@ -199,23 +164,23 @@
         /* 4. 主行程表 */
         #main-app { display: none; opacity: 0; transition: opacity 1s; }
 
-        /* 置頂群組容器 */
+        /* ★★★ 修改重點：改用 Fixed 定位，這是解決手機版卡頓與空白的最強解法 ★★★ */
         .sticky-header-group {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            position: fixed; /* 強制固定在視窗最上方 */
+            top: 0; left: 0;
             width: 100%;
+            z-index: 1000;
             background-color: #f5f7fa; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 增加陰影讓層次更明顯 */
         }
 
         header { background-color: #2c3e50; color: white; padding: 20px 10px; text-align: center; }
         header h1 { margin: 0; font-size: 1.4rem; }
         .subtitle { font-size: 0.9rem; color: #bdc3c7; margin-top: 5px; }
 
-        /* Tab 選單 */
         .tab-nav {
             background: white; display: flex; justify-content: center;
-            padding: 12px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            padding: 12px 0; 
             flex-wrap: wrap; 
         }
         .nav-btn {
@@ -223,7 +188,6 @@
             cursor: pointer; padding: 8px 15px; margin: 3px;
             border-radius: 20px; transition: all 0.3s;
             display: flex; align-items: center; font-weight: bold; white-space: nowrap;
-            /* ★ 優化：增加按鈕觸控區 */
             touch-action: manipulation;
         }
         @media (max-width: 480px) {
@@ -234,7 +198,9 @@
         .nav-btn.special-btn { color: #e67e22; border: 1px solid #e67e22; }
         .nav-btn.special-btn:hover { background-color: #e67e22; color: white; }
 
+        /* Container 預設 padding，之後會由 JS 自動調整 */
         .container { max-width: 800px; margin: 0 auto; padding: 20px 15px 50px 15px; }
+        
         .day-content { display: none; animation: fadeIn 0.5s; }
         .day-content.active { display: block; }
         .day-header {
@@ -342,6 +308,21 @@
     var mainApp = document.getElementById('main-app');
     var timerText = document.getElementById('timer-text');
 
+    // ★★★ 自動調整內容間距的函式 ★★★
+    // 因為標題是用 Fixed 固定，會浮在內容上面，所以要算它有多高，幫內容加 Padding
+    function adjustContentPadding() {
+        var headerGroup = document.querySelector('.sticky-header-group');
+        var container = document.getElementById('main-container');
+        if(headerGroup && container) {
+            // 取得標題高度 + 20px 緩衝
+            var height = headerGroup.offsetHeight + 20;
+            container.style.paddingTop = height + 'px';
+        }
+    }
+
+    // 監聽視窗大小改變 (例如手機橫放直放)，自動重新計算高度
+    window.addEventListener('resize', adjustContentPadding);
+
     function updateCountdown() {
         var now = new Date();
         var diff = targetDate - now;
@@ -396,7 +377,10 @@
         landingPage.style.opacity = '0';
         landingPage.style.visibility = 'hidden';
         mainApp.style.display = 'block';
-        setTimeout(function(){ mainApp.style.opacity = '1'; }, 50);
+        setTimeout(function(){ 
+            mainApp.style.opacity = '1'; 
+            adjustContentPadding(); // 顯示後立即計算一次高度
+        }, 50);
     }
 
     // === 行程資料 ===
@@ -558,10 +542,12 @@
         noteBtn.onclick = function() {
             prepPage.style.display = 'flex';
             setTimeout(function(){ prepPage.style.opacity = '1'; }, 50);
-            // ★ 修改 3：開啟注意事項時，也強制捲動回最上方，避免被遮擋
-            window.scrollTo({ top: 0, behavior: 'auto' });
+            // ★ 修改 3：移除這裡的 scrollTo，讓使用者看完注意事項後，能留在原地繼續看行程
         };
         navContainer.appendChild(noteBtn);
+        
+        // 初始化後計算一次高度
+        setTimeout(adjustContentPadding, 100);
     }
 
     function switchTab(index) {
@@ -576,7 +562,7 @@
         setTimeout(function(){ allContents[index].classList.add('active'); }, 10);
         allBtns[index].classList.add('active');
         
-        // ★ 修改 4：切換分頁時，強制讓視窗捲動回最頂部
+        // 切換分頁時，因為是新內容，還是幫使用者捲回最上面比較貼心
         window.scrollTo({ top: 0, behavior: 'auto' });
     }
 

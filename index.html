@@ -32,21 +32,39 @@
             text-align: center; 
             color: white; 
             padding: 20px; 
-            width: 100%; /* 確保內容區塊寬度足夠 */
+            width: 100%;
             box-sizing: border-box;
         }
+
+        /* ★ 修改點 2：標題造型設計 ★ */
         .landing-content h1 { 
-            font-size: 2.5rem; 
-            margin-bottom: 10px; 
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            /* ★ 修改點 1：強制不換行 */
-            white-space: nowrap; 
+            font-size: 3rem; /* 字體加大 */
+            margin-bottom: 20px; 
+            white-space: nowrap; /* 保持不換行 */
+            
+            /* 造型設定：可愛的圓潤字體與陰影 */
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 4px 4px 0px #e67e22, 6px 6px 0px rgba(0,0,0,0.2); /* 橘色立體陰影 */
+            transform: rotate(-2deg); /* 稍微歪一點點比較活潑 */
+            display: inline-block; /* 讓旋轉生效 */
         }
-        .landing-content p { font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9; }
+
+        /* 特別強調 "南" 這個字 */
+        .highlight-word {
+            color: #f1c40f; /* 亮黃色 */
+            font-size: 1.2em; /* 再大一點 */
+            text-shadow: 4px 4px 0px #c0392b; /* 改用紅色陰影對比 */
+            display: inline-block;
+            transform: translateY(-5px); /* 稍微跳起來的感覺 */
+        }
+
+        .landing-content p { font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9; margin-top: 10px; }
         
-        /* 手機版字體縮小，避免不換行導致凸出畫面 */
+        /* 手機版字體自動縮小，避免爆版 */
         @media (max-width: 480px) {
-            .landing-content h1 { font-size: 1.6rem; } 
+            .landing-content h1 { font-size: 1.8rem; text-shadow: 2px 2px 0px #e67e22; } 
         }
 
         /* 按鈕樣式 */
@@ -54,10 +72,9 @@
             background-color: #e67e22; color: white; border: 2px solid white;
             padding: 15px 40px; font-size: 1.3rem; font-weight: bold;
             border-radius: 50px; cursor: pointer; 
-            /* ★ 修改點 1 & 2：設定 auto 讓它左右置中 */
             margin: 15px auto; 
             box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s;
-            width: 80%; max-width: 300px; display: block; /* display block + margin auto 達成置中 */
+            width: 80%; max-width: 300px; display: block; 
         }
         .big-btn:hover { transform: scale(1.05); background-color: #d35400; }
         .big-btn.secondary { background-color: #34495e; border-color: #ecf0f1; }
@@ -72,14 +89,13 @@
             background: rgba(0, 0, 0, 0.2);
             padding: 10px 20px;
             border-radius: 10px;
-            /* ★ 修改點 2：確保倒數計時框也置中 */
             margin: 0 auto 30px auto; 
             color: white;
             font-size: 1.1rem;
             font-weight: bold;
             letter-spacing: 1px;
             border: 1px solid rgba(255,255,255,0.3);
-            display: inline-block; /* 讓 margin auto 生效 */
+            display: inline-block; 
         }
 
         /* 3. 行前注意事項頁 */
@@ -167,7 +183,7 @@
 
 <div id="landing-page" class="fullscreen-page">
     <div class="landing-content">
-        <h1>享受''南''得慵懶之旅</h1>
+        <h1>享受<span class="highlight-word">"南"</span>得慵懶之旅</h1>
         <p>2026 農曆過年初三-初五</p>
         <button id="go-btn" class="big-btn">粗發~台南 GO GO!!</button>
     </div>
@@ -353,8 +369,8 @@
                 { 
                     time: "18:00", 
                     location: "懷舊泡麵趴", 
-                    // ★ 修改點 4：設定 address 屬性，指定導航到特定地址
-                    address: "731臺南市後壁區142-1號",
+                    // ★ 修改點 1：將導航地址設定為 失眠圖書館
+                    address: "失眠圖書館",
                     note: "有多久沒有大家一起吃泡麵的歡樂時光了呢?", 
                     image: "https://down-tw.img.susercontent.com/file/sg-11134201-824in-mf55d395dk3w65_tn.webp", 
                     desc: "近幾年的旅行總是遇到最大的困難，就是要吃泡麵卻吃不下了......每次的旅程總有一個微小的汙點，這次我們決定了!!!!! 人總是要向前進，要求進步，這次我們直接把泡麵當正餐!!! 泡麵趴~~泡麵趴~~凍蒜!! 凍蒜!! 請唯一支持泡麵趴(不支持也沒辦法，因為我已經排了)"  
@@ -370,7 +386,6 @@
                     time: "10:30", 
                     location: "緩慢退房", 
                     note: "在失眠圖書館享受最後的早晨與書香", 
-                    // ★ 修改點 3：照片換成跟 Day 1 失眠圖書館一樣
                     image: "https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=600&auto=format&fit=crop", 
                     desc: "最後的慵懶快樂時光還是要好好的享受享受...活在當下、享受當時，過去了就回不去了", 
                     hideMap: true
@@ -411,7 +426,6 @@
 
             for (var j = 0; j < dayData.events.length; j++) {
                 var event = dayData.events[j];
-                // ★ 修改程式邏輯：如果有 address 就用 address，沒有就用 location
                 var query = event.address ? event.address : event.location;
                 var mapLink = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(query);
 

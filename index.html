@@ -47,7 +47,6 @@
             background: linear-gradient(135deg, #16a085 0%, #f4d03f 100%);
             display: none; opacity: 0;
         }
-        /* 新增：倒數計時樣式 */
         #countdown-box {
             background: rgba(0, 0, 0, 0.2);
             padding: 10px 20px;
@@ -62,10 +61,9 @@
 
         /* 3. 行前注意事項頁 */
         #prep-page {
-            background-color: rgba(0,0,0,0.8); /* 改成半透明黑底，像彈窗 */
+            background-color: rgba(0,0,0,0.8);
             display: none; opacity: 0;
-            justify-content: center; /* 上下置中 */
-            align-items: center;
+            justify-content: center; align-items: center;
             z-index: 10000;
         }
         .prep-container {
@@ -73,7 +71,7 @@
             background: white; padding: 25px;
             border-radius: 15px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            max-height: 80vh; overflow-y: auto; /* 內容太多可捲動 */
+            max-height: 80vh; overflow-y: auto;
         }
         .prep-title { color: #e67e22; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; margin-top: 0;}
         .prep-list { text-align: left; line-height: 1.8; font-size: 1.1rem; padding-left: 20px; }
@@ -90,28 +88,35 @@
         header h1 { margin: 0; font-size: 1.4rem; }
         .subtitle { font-size: 0.9rem; color: #bdc3c7; margin-top: 5px; }
 
-        /* Tab 選單 */
+        /* --- Tab 選單樣式優化 --- */
         .tab-nav {
             background: white; display: flex; justify-content: center;
             padding: 12px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
             position: sticky; top: 0; z-index: 100;
-            overflow-x: auto; /* 防止按鈕太多爆版 */
+            flex-wrap: wrap; /* ★關鍵：允許換行，手機不會被切掉 */
         }
         .nav-btn {
             background: none; border: none; font-size: 1rem; color: #95a5a6;
-            cursor: pointer; padding: 8px 15px; margin: 0 2px; border-radius: 20px;
-            transition: all 0.3s; display: flex; align-items: center; font-weight: bold; white-space: nowrap;
+            cursor: pointer; padding: 8px 15px; margin: 3px; /* 稍微增加間距 */
+            border-radius: 20px; transition: all 0.3s;
+            display: flex; align-items: center; font-weight: bold; white-space: nowrap;
         }
+        
+        /* 手機版特別調整：字變小一點，排版更緊湊 */
+        @media (max-width: 480px) {
+            .nav-btn {
+                font-size: 0.9rem;
+                padding: 6px 12px;
+                flex-grow: 1; /* 讓按鈕平均撐開 */
+                justify-content: center;
+            }
+        }
+
         .nav-btn span { margin-right: 5px; font-size: 1.2rem; }
         .nav-btn.active { background-color: #3498db; color: white; box-shadow: 0 2px 5px rgba(52, 152, 219, 0.4); }
         
-        /* 特別給「注意事項」按鈕的樣式 */
-        .nav-btn.special-btn {
-            color: #e67e22; border: 1px solid #e67e22;
-        }
-        .nav-btn.special-btn:hover {
-            background-color: #e67e22; color: white;
-        }
+        .nav-btn.special-btn { color: #e67e22; border: 1px solid #e67e22; }
+        .nav-btn.special-btn:hover { background-color: #e67e22; color: white; }
 
         .container { max-width: 800px; margin: 0 auto; padding: 20px 15px 50px 15px; }
         .day-content { display: none; animation: fadeIn 0.5s; }
@@ -122,19 +127,19 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.05); border-left: 5px solid #3498db;
         }
 
-        /* Timeline & Info */
         .timeline-item { position: relative; display: flex; padding-bottom: 30px; }
         .time { width: 70px; text-align: right; padding-right: 20px; font-weight: 800; color: #e67e22; flex-shrink: 0; font-size: 1.1rem; padding-top: 4px; }
         .timeline-item::before { content: ''; position: absolute; left: 81px; top: 10px; bottom: -10px; width: 2px; background-color: #dcdcdc; }
-        .timeline-item::last-child::before { display: none; }
+        .timeline-item:last-child::before { display: none; }
         .timeline-item::after { content: ''; position: absolute; left: 76px; top: 8px; width: 12px; height: 12px; border-radius: 50%; background-color: #3498db; border: 3px solid #f5f7fa; box-shadow: 0 0 0 1px #dcdcdc; z-index: 1; }
+        
         .info { flex-grow: 1; background: white; padding: 15px 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-left: 15px; position: relative; }
         .info::before { content: ''; position: absolute; left: -8px; top: 12px; width: 0; height: 0; border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-right: 8px solid white; }
+        
         .location { font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; color: #2c3e50; }
         .note { font-size: 1rem; color: #666; margin-bottom: 10px; line-height: 1.5; }
         .btn-map { display: inline-block; background-color: #27ae60; color: white; text-decoration: none; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; }
 
-        /* 圖文區 */
         .details-block { margin-top: 15px; padding-top: 15px; border-top: 1px dashed #eee; display: flex; gap: 15px; }
         .details-img { width: 120px; height: 90px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
         .details-text { font-size: 0.95rem; color: #555; line-height: 1.6; text-align: justify; }
@@ -197,17 +202,14 @@
 </div>
 
 <script>
-    // === 設定變數 ===
-    var targetDate = new Date('2026-02-19T10:30:00'); // 出發時間
+    var targetDate = new Date('2026-02-19T10:30:00'); 
 
-    // 取得元素
     var landingPage = document.getElementById('landing-page');
     var menuPage = document.getElementById('menu-page');
     var prepPage = document.getElementById('prep-page');
     var mainApp = document.getElementById('main-app');
     var timerText = document.getElementById('timer-text');
 
-    // === 倒數計時功能 ===
     function updateCountdown() {
         var now = new Date();
         var diff = targetDate - now;
@@ -225,17 +227,14 @@
         timerText.innerHTML = days + "天 " + hours + "時 " + minutes + "分 " + seconds + "秒";
     }
 
-    // 啟動倒數計時 (每秒更新一次)
     setInterval(updateCountdown, 1000);
-    updateCountdown(); // 先執行一次避免畫面延遲
+    updateCountdown(); 
 
-    // === 按鈕邏輯 ===
     document.getElementById('go-btn').onclick = function() {
         var now = new Date();
         if (now >= targetDate) {
-            goToItinerary(); // 時間到，直接進入
+            goToItinerary(); 
         } else {
-            // 時間沒到，顯示選單
             landingPage.style.opacity = '0';
             landingPage.style.visibility = 'hidden';
             menuPage.style.display = 'flex';
@@ -294,7 +293,8 @@
                     time: "15:00", 
                     location: "失眠圖書館", 
                     note: "圖書館最終還是最適合治療失眠的地方", 
-                    image: "https://www.facebook.com/photo/?fbid=1154119553574655&set=pcb.1154119653574645", 
+                    // ★ 圖片已換成公開的 Unsplash 示意圖，確保能顯示 (FB連結不穩)
+                    image: "https://images.unsplash.com/photo-1568667256549-094345857637?q=80&w=600&auto=format&fit=crop", 
                     desc: "老屋裡的書與夢 隱身於時光流轉的巷弄中，42年建築的歲月痕跡，融入閱讀、旅行與生活美學，打造一處讓人可以放慢步調、靜心閱讀、深度棲居的所在。" 
                 },
                 { 
@@ -329,7 +329,7 @@
                     time: "16:00", 
                     location: "失眠圖書館", 
                     note: "休息好好準備晚上的泡麵趴", 
-                    image: "https://www.facebook.com/photo/?fbid=1154119553574655&set=pcb.1154119653574645", 
+                    image: "https://images.unsplash.com/photo-1544640808-32ca72ac7f37?q=80&w=600&auto=format&fit=crop", 
                     desc: "休息是為了走更長遠的路，繼續享受在書香與老宅氛圍中，體驗一段靜謐時光。閱讀不只是知識的入口，也是通往自我與世界更深沉的旅程。" 
                 },
                 { time: "17:00", location: "全聯福利中心 台南後壁店", note: "泡麵趴買起乃~", 
@@ -350,7 +350,7 @@
                     desc: "最後的慵懶快樂時光還是要好好的享受享受...活在當下、享受當時，過去了就回不去了", hideMap: true},
                 { time: "11:30", location: "打貓廚房", note: "午餐~Hit Cat Kitchen", 
                     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9sSJ9cqB94aIuNOzkVXVQQYohRuqXNLzRSA&s", 
-                    // ★ 這裡我幫您把斷行修復接在一起了！
+                    // ★ 修正了這裡的斷行問題
                     desc: "嘉義民雄古地名「打猫」,此店象徵民雄人們對土地的敬意與初心不變的堅持。老闆利用當地原汁原味地食材創造的美式料理,不只是餐廳,更是一間融合美食與餐酒文化的全新型態的美式餐酒館，在此趟享受''南''得慵懶的最後一餐就讓我們一起探索民雄的美式靈魂與手作溫度的饗宴吧。"  },
                 { time: "14:00", location: "綠金蕃茄南瓜農場", note: "全國唯一七彩百變南瓜隧道", 
                     image: "https://imageapi.click2.travel/upload/turImageStock/80158/RGJ6S1GTV5CT.jpg", 
@@ -366,7 +366,6 @@
         mainContainer.innerHTML = "";
         navContainer.innerHTML = "";
 
-        // 1. 產生每一天的按鈕
         for (var i = 0; i < itineraryData.length; i++) {
             var dayData = itineraryData[i];
             
@@ -386,7 +385,6 @@
 
             for (var j = 0; j < dayData.events.length; j++) {
                 var event = dayData.events[j];
-                // 使用官方 HTTPS 連結
                 var mapLink = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(event.location);
 
                 htmlContent += '<div class="timeline-item">';
@@ -413,12 +411,10 @@
             mainContainer.appendChild(dayDiv);
         }
 
-        // ★ 新增：在 Day 3 後面加上「行前注意事項」按鈕
         var noteBtn = document.createElement('button');
         noteBtn.className = 'nav-btn special-btn';
         noteBtn.innerHTML = '<span>📋</span>注意事項';
         noteBtn.onclick = function() {
-            // 打開注意事項頁面 (跟首頁那個按鈕一樣的功能)
             prepPage.style.display = 'flex';
             setTimeout(function(){ prepPage.style.opacity = '1'; }, 50);
         };
@@ -428,11 +424,9 @@
     function switchTab(index) {
         var allContents = document.querySelectorAll('.day-content');
         var allBtns = document.querySelectorAll('.nav-btn');
-        // 只移除前幾個 (Day 1~3) 的 active，不要影響到「注意事項」按鈕
         for (var k = 0; k < allContents.length; k++) {
             allContents[k].style.display = 'none';
             allContents[k].classList.remove('active');
-            // 如果按鈕數量比內容多(因為加了注意事項)，要小心陣列索引
             if(allBtns[k]) allBtns[k].classList.remove('active');
         }
         allContents[index].style.display = 'block';
@@ -440,7 +434,6 @@
         allBtns[index].classList.add('active');
     }
 
-    // 錯誤偵測 (萬一有其他語法錯誤，至少知道哪裡壞了)
     window.onerror = function(message) {
         alert("網頁發生錯誤：" + message);
     };

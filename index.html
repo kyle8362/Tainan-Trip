@@ -12,7 +12,6 @@
             background-color: #f5f7fa;
             margin: 0; padding: 0;
             width: 100%; height: 100%;
-            overflow-x: hidden; /* 防止斜切背景超出產生捲軸 */
         }
 
         /* 共用：全螢幕頁面樣式 */
@@ -25,81 +24,23 @@
             transition: opacity 0.5s, visibility 0.5s;
         }
 
-        /* =========================================
-           1. 歡迎頁面 (速度感轉場版)
-           我們把背景拆成兩塊 (.bg-panel)，內容放在 (.landing-content-wrapper)
-        ========================================= */
+        /* 1. 歡迎頁面 (過年配色) */
         #landing-page {
-            background: transparent; /* 移除原本背景，改由 panel 控制 */
+            background: linear-gradient(135deg, #2c3e50 0%, #a04000 100%);
             overflow: hidden;
         }
-
-        /* 背景色塊共用設定 */
-        .bg-panel {
-            position: absolute;
-            top: 0; bottom: 0;
-            width: 60%; /* 寬度大於 50% 以覆蓋斜切的縫隙 */
-            z-index: 0;
-            transform: skewX(-15deg); /* ★ 關鍵：讓色塊變斜 */
-            transition: transform 0.6s cubic-bezier(0.7, 0, 0.2, 1); /* ★ 關鍵：強烈的速度曲線 */
-        }
-
-        /* 左邊色塊 (深藍色) */
-        .panel-left {
-            left: -10%; /* 往左稍微超出，確保蓋住邊緣 */
-            background: #2c3e50;
-            transform-origin: top left;
-        }
-
-        /* 右邊色塊 (漸層橘紅色) */
-        .panel-right {
-            right: -10%; /* 往右稍微超出 */
-            background: linear-gradient(135deg, #a04000 0%, #d35400 100%);
-            transform-origin: bottom right;
-        }
-
-        /* === 觸發轉場時的動畫 === */
-        /* 當加上 .slide-out class 時，左右色塊飛走 */
-        #landing-page.slide-out .panel-left {
-            transform: skewX(-15deg) translateX(-120%); /* 往左飛 */
-        }
-        #landing-page.slide-out .panel-right {
-            transform: skewX(-15deg) translateX(120%); /* 往右飛 */
-        }
-
-        /* 內容容器 (確保內容在色塊之上) */
-        .landing-content-wrapper {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            width: 100%;
-            transition: all 0.4s ease-in; /* 內容消失稍微快一點 */
-        }
-
-        /* 轉場時，內容放大並消失 (像穿過去的感覺) */
-        #landing-page.slide-out .landing-content-wrapper {
-            opacity: 0;
-            transform: scale(1.5);
-        }
         
-        /* 過年裝飾 (燈籠) - 也要跟著內容一起消失 */
+        /* 過年裝飾 (燈籠) */
         .cny-decoration {
             position: absolute;
             top: -20px;
             font-size: 4rem;
             animation: swing 3s infinite ease-in-out;
-            z-index: 3; /* 在最上層 */
+            z-index: 0;
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
-            transition: transform 0.5s ease-in, opacity 0.5s;
         }
         .lantern-left { left: 20px; animation-delay: 0s; }
         .lantern-right { right: 20px; animation-delay: 1.5s; }
-
-        /* 轉場時燈籠往上飛走 */
-        #landing-page.slide-out .cny-decoration {
-            transform: translateY(-150px);
-            opacity: 0;
-        }
         
         @keyframes swing {
             0% { transform: rotate(-5deg); }
@@ -107,7 +48,17 @@
             100% { transform: rotate(-5deg); }
         }
 
-        /* === 標題大改造 (三行式 - 微調版) === */
+        .landing-content { 
+            text-align: center; 
+            color: white; 
+            padding: 20px; 
+            width: 100%;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* === 標題大改造 (三行式 - 手機版優化) === */
         .title-container {
             display: flex;
             flex-direction: column;
@@ -124,7 +75,8 @@
             letter-spacing: 5px;
             margin-bottom: -15px; 
             text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-            transform: translateX(-50px); 
+            /* 電腦版預設偏移 */
+            transform: translateX(-60px); 
         }
 
         /* 第二行：南 */
@@ -132,7 +84,9 @@
             font-size: 6rem; 
             font-weight: 900;
             color: #f1c40f; 
-            text-shadow: 4px 4px 0px #c0392b, 8px 8px 15px rgba(0,0,0,0.5);
+            text-shadow: 
+                4px 4px 0px #c0392b, 
+                8px 8px 15px rgba(0,0,0,0.5);
             line-height: 1.2;
             margin: 5px 0;
             font-family: "KaiTi", "BiauKai", serif; 
@@ -146,19 +100,33 @@
             color: #ecf0f1;
             letter-spacing: 3px;
             margin-top: -5px;
-            transform: translateX(50px);
+            /* 電腦版預設偏移 */
+            transform: translateX(60px);
         }
 
-        /* 手機版適配 */
+        /* ★★★ 手機版特別調整區 ★★★ */
         @media (max-width: 480px) {
-            .title-line-1 { font-size: 2.2rem; transform: translateX(-90px); margin-bottom: -10px; }
-            .title-line-2 { font-size: 4.5rem; margin: 0; }
-            .title-line-3 { font-size: 1.3rem; transform: translateX(60px); margin-top: -5px; }
+            .title-line-1 { 
+                font-size: 2.2rem; /* 稍微縮小避免太擠 */
+                /* 往左移更多，讓「受」對齊「南」的左引號 */
+                transform: translateX(-90px); 
+                margin-bottom: -10px;
+            }
+            .title-line-2 { 
+                /* 中間的字稍微縮小，騰出空間 */
+                font-size: 4.5rem; 
+                margin: 0;
+            }
+            .title-line-3 { 
+                font-size: 1.3rem; 
+                /* 往右移更多，讓「得」對齊「南」的右引號 */
+                transform: translateX(60px); 
+                margin-top: -5px;
+            }
         }
 
-        .landing-content-wrapper p { 
+        .landing-content p { 
             font-size: 1.1rem; 
-            color: white;
             margin-bottom: 40px; 
             opacity: 0.8; 
             margin-top: 30px; 
@@ -170,7 +138,8 @@
         
         /* === 圓形按鈕 === */
         #go-btn {
-            width: 140px; height: 140px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
             background-color: #e67e22; 
             color: white; 
@@ -180,13 +149,12 @@
             margin: 0 auto; 
             box-shadow: 0 0 20px rgba(230, 126, 34, 0.6); 
             transition: all 0.3s;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             line-height: 1.3;
             animation: pulse 2s infinite;
-            /* 確保按鈕可點擊 */
-            position: relative; 
-            z-index: 10;
         }
         
         #go-btn span { display: block; }
@@ -207,14 +175,22 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(230, 126, 34, 0); }
         }
 
+        /* 其他原有樣式 */
+        .big-btn { 
+            background-color: #e67e22; color: white; border: 2px solid white;
+            padding: 15px 40px; font-size: 1.3rem; font-weight: bold;
+            border-radius: 50px; cursor: pointer; margin: 15px auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s;
+            width: 80%; max-width: 300px; display: block;
+        }
+        .big-btn:hover { transform: scale(1.05); background-color: #d35400; }
+        .big-btn.secondary { background-color: #34495e; border-color: #ecf0f1; }
+
         /* 2. 中間選單頁 */
         #menu-page {
             background: linear-gradient(135deg, #16a085 0%, #f4d03f 100%);
             display: none; opacity: 0;
-            text-align: center;
         }
-        #menu-page .landing-content { color: white; } /* 修正文字顏色 */
-
         #countdown-box {
             background: rgba(0, 0, 0, 0.2);
             padding: 10px 20px;
@@ -227,16 +203,6 @@
             border: 1px solid rgba(255,255,255,0.3);
             display: inline-block; 
         }
-
-        .big-btn { 
-            background-color: #e67e22; color: white; border: 2px solid white;
-            padding: 15px 40px; font-size: 1.3rem; font-weight: bold;
-            border-radius: 50px; cursor: pointer; margin: 15px auto;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.2s;
-            width: 80%; max-width: 300px; display: block;
-        }
-        .big-btn:hover { transform: scale(1.05); background-color: #d35400; }
-        .big-btn.secondary { background-color: #34495e; border-color: #ecf0f1; }
 
         /* 3. 行前注意事項頁 */
         #prep-page {
@@ -267,10 +233,12 @@
         header h1 { margin: 0; font-size: 1.4rem; }
         .subtitle { font-size: 0.9rem; color: #bdc3c7; margin-top: 5px; }
 
+        /* Tab 選單 */
         .tab-nav {
             background: white; display: flex; justify-content: center;
             padding: 12px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            position: sticky; top: 0; z-index: 100; flex-wrap: wrap; 
+            position: sticky; top: 0; z-index: 100;
+            flex-wrap: wrap; 
         }
         .nav-btn {
             background: none; border: none; font-size: 1rem; color: #95a5a6;
@@ -279,7 +247,9 @@
             display: flex; align-items: center; font-weight: bold; white-space: nowrap;
         }
         @media (max-width: 480px) {
-            .nav-btn { font-size: 0.9rem; padding: 6px 12px; flex-grow: 1; justify-content: center; }
+            .nav-btn {
+                font-size: 0.9rem; padding: 6px 12px; flex-grow: 1; justify-content: center;
+            }
         }
         .nav-btn span { margin-right: 5px; font-size: 1.2rem; }
         .nav-btn.active { background-color: #3498db; color: white; box-shadow: 0 2px 5px rgba(52, 152, 219, 0.4); }
@@ -318,13 +288,10 @@
 <body>
 
 <div id="landing-page" class="fullscreen-page">
-    <div class="bg-panel panel-left"></div>
-    <div class="bg-panel panel-right"></div>
-
     <div class="cny-decoration lantern-left">🏮</div>
     <div class="cny-decoration lantern-right">🏮</div>
 
-    <div class="landing-content-wrapper">
+    <div class="landing-content">
         <div class="title-container">
             <div class="title-line-1">享受</div>
             <div class="title-line-2">"南"</div>
@@ -414,46 +381,16 @@
     setInterval(updateCountdown, 1000);
     updateCountdown(); 
 
-    // === 轉場動畫與頁面跳轉邏輯 ===
-    function triggerTransitionAndGo() {
-        // 1. 觸發轉場動畫：加上 .slide-out class
-        landingPage.classList.add('slide-out');
-
-        // 2. 等待動畫跑完 (0.6秒) 後，再切換頁面
-        setTimeout(function() {
-            landingPage.style.display = 'none'; // 完全隱藏歡迎頁
-            menuPage.style.display = 'none';    // 確保選單也隱藏
-            
-            // 顯示主程式
-            mainApp.style.display = 'block';
-            setTimeout(function(){ mainApp.style.opacity = '1'; }, 50);
-        }, 600); // 這裡的時間要配合 CSS transition 的時間
-    }
-
-    // 按下 GO 按鈕
     document.getElementById('go-btn').onclick = function() {
         var now = new Date();
         if (now >= targetDate) {
-            // 時間到：執行酷炫轉場 -> 進入行程
-            triggerTransitionAndGo();
+            goToItinerary(); 
         } else {
-            // 時間沒到：進入秘密選單 (直接切換，不需滑動特效)
             landingPage.style.opacity = '0';
             landingPage.style.visibility = 'hidden';
             menuPage.style.display = 'flex';
             setTimeout(function(){ menuPage.style.opacity = '1'; }, 50);
         }
-    };
-
-    // 秘密選單：偷看行程按鈕
-    document.getElementById('btn-peek').onclick = function() {
-        menuPage.style.opacity = '0';
-        setTimeout(function(){ 
-            menuPage.style.display = 'none'; 
-            // 偷看行程也直接顯示主程式 (跳過歡迎頁轉場，因為已經在選單了)
-            mainApp.style.display = 'block';
-            setTimeout(function(){ mainApp.style.opacity = '1'; }, 50);
-        }, 500);
     };
 
     document.getElementById('btn-prep').onclick = function() {
@@ -465,6 +402,21 @@
         prepPage.style.opacity = '0';
         setTimeout(function(){ prepPage.style.display = 'none'; }, 500);
     };
+
+    document.getElementById('btn-peek').onclick = function() {
+        menuPage.style.opacity = '0';
+        setTimeout(function(){ 
+            menuPage.style.display = 'none'; 
+            goToItinerary();
+        }, 500);
+    };
+
+    function goToItinerary() {
+        landingPage.style.opacity = '0';
+        landingPage.style.visibility = 'hidden';
+        mainApp.style.display = 'block';
+        setTimeout(function(){ mainApp.style.opacity = '1'; }, 50);
+    }
 
     // === 行程資料 ===
     var itineraryData = [

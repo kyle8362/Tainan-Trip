@@ -24,14 +24,13 @@
             transition: opacity 0.5s, visibility 0.5s;
         }
 
-        /* 1. 歡迎頁面 (加入過年配色) */
+        /* 1. 歡迎頁面 (過年配色) */
         #landing-page {
-            /* 改成稍微帶點紅色的深藍漸層，更有過年夜晚的感覺，也對比金色文字 */
             background: linear-gradient(135deg, #2c3e50 0%, #a04000 100%);
-            overflow: hidden; /* 防止裝飾超出 */
+            overflow: hidden;
         }
         
-        /* === 過年裝飾 (左右燈籠) === */
+        /* 過年裝飾 (燈籠) */
         .cny-decoration {
             position: absolute;
             top: -20px;
@@ -43,7 +42,6 @@
         .lantern-left { left: 20px; animation-delay: 0s; }
         .lantern-right { right: 20px; animation-delay: 1.5s; }
         
-        /* 燈籠搖晃動畫 */
         @keyframes swing {
             0% { transform: rotate(-5deg); }
             50% { transform: rotate(5deg); }
@@ -57,10 +55,10 @@
             width: 100%;
             box-sizing: border-box;
             position: relative;
-            z-index: 1; /* 確保內容在燈籠前面 */
+            z-index: 1;
         }
 
-        /* === 標題大改造 (三行式) === */
+        /* === 標題大改造 (三行式 - 微調版) === */
         .title-container {
             display: flex;
             flex-direction: column;
@@ -69,67 +67,83 @@
             margin-bottom: 30px;
         }
 
+        /* 第一行：享受 */
         .title-line-1 {
-            font-size: 1.8rem;
-            font-weight: bold;
+            font-size: 3.5rem; /* ★ 放大 */
+            font-weight: 900;
             color: #ecf0f1;
             letter-spacing: 5px;
-            margin-bottom: -10px; /* 讓字靠近一點 */
+            margin-bottom: -15px; 
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            
+            /* ★ 向左偏移 */
+            transform: translateX(-50px); 
         }
 
+        /* 第二行：南 */
         .title-line-2 {
-            font-size: 8rem; /* 超大 */
+            font-size: 6rem; /* ★ 稍微縮小 (原本8rem) */
             font-weight: 900;
-            color: #f1c40f; /* 金色 */
+            color: #f1c40f; 
             text-shadow: 
-                4px 4px 0px #c0392b, /* 紅色陰影 */
+                4px 4px 0px #c0392b, 
                 8px 8px 15px rgba(0,0,0,0.5);
-            line-height: 1;
-            margin: 10px 0;
-            font-family: "KaiTi", "BiauKai", serif; /* 嘗試用標楷體更有年味 */
+            line-height: 1.2;
+            margin: 5px 0;
+            font-family: "KaiTi", "BiauKai", serif; 
+            
+            /* 稍微旋轉一點點增加活潑感 */
+            transform: rotate(-3deg);
         }
 
+        /* 第三行：得慵懶之旅 */
         .title-line-3 {
             font-size: 1.8rem;
             font-weight: bold;
             color: #ecf0f1;
             letter-spacing: 3px;
             margin-top: -5px;
+            
+            /* ★ 向右偏移 */
+            transform: translateX(50px);
+        }
+
+        /* 手機版適配：縮小字體但保持相對位置 */
+        @media (max-width: 480px) {
+            .title-line-1 { font-size: 2.5rem; transform: translateX(-30px); }
+            .title-line-2 { font-size: 5rem; }
+            .title-line-3 { font-size: 1.4rem; transform: translateX(30px); }
         }
 
         .landing-content p { 
             font-size: 1.1rem; 
             margin-bottom: 40px; 
             opacity: 0.8; 
-            margin-top: 20px;
+            margin-top: 30px; /* 增加一點上距 */
             background: rgba(0,0,0,0.2);
             padding: 5px 15px;
             border-radius: 20px;
             display: inline-block;
         }
         
-        /* === 圓形按鈕設計 === */
+        /* === 圓形按鈕 === */
         #go-btn {
             width: 140px;
             height: 140px;
-            border-radius: 50%; /* 變成正圓形 */
+            border-radius: 50%;
             background-color: #e67e22; 
             color: white; 
-            border: 4px solid #f1c40f; /* 金色邊框 */
+            border: 4px solid #f1c40f; 
             font-weight: bold;
             cursor: pointer; 
             margin: 0 auto; 
             box-shadow: 0 0 20px rgba(230, 126, 34, 0.6); 
             transition: all 0.3s;
-            
-            /* 讓文字垂直置中排列 */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             line-height: 1.3;
-            
-            /* 心跳動畫 */
             animation: pulse 2s infinite;
         }
         
@@ -142,7 +156,7 @@
             transform: scale(1.1); 
             background-color: #d35400; 
             border-color: #fff;
-            animation: none; /* 滑鼠移上去停止跳動 */
+            animation: none; 
         }
         
         @keyframes pulse {
@@ -151,8 +165,8 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(230, 126, 34, 0); }
         }
 
-        /* 其他原有樣式 (選單、注意事項等) 保持不變 */
-        .big-btn { /* 這是給選單頁用的長條按鈕 */
+        /* 其他原有樣式 */
+        .big-btn { 
             background-color: #e67e22; color: white; border: 2px solid white;
             padding: 15px 40px; font-size: 1.3rem; font-weight: bold;
             border-radius: 50px; cursor: pointer; margin: 15px auto;
@@ -162,7 +176,7 @@
         .big-btn:hover { transform: scale(1.05); background-color: #d35400; }
         .big-btn.secondary { background-color: #34495e; border-color: #ecf0f1; }
 
-        /* 2. 中間選單頁 (秘密基地) */
+        /* 2. 中間選單頁 */
         #menu-page {
             background: linear-gradient(135deg, #16a085 0%, #f4d03f 100%);
             display: none; opacity: 0;

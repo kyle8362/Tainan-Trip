@@ -21,11 +21,12 @@
             z-index: 9999;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            transition: opacity 0.5s, visibility 0.5s;
+            transition: opacity 0.8s, visibility 0.8s; /* 恢復成柔和的淡出 */
         }
 
         /* 1. 歡迎頁面 (過年配色) */
         #landing-page {
+            /* 恢復原本的漸層背景 */
             background: linear-gradient(135deg, #2c3e50 0%, #a04000 100%);
             overflow: hidden;
         }
@@ -107,19 +108,16 @@
         /* ★★★ 手機版特別調整區 ★★★ */
         @media (max-width: 480px) {
             .title-line-1 { 
-                font-size: 2.2rem; /* 稍微縮小避免太擠 */
-                /* 往左移更多，讓「受」對齊「南」的左引號 */
+                font-size: 2.2rem; 
                 transform: translateX(-90px); 
                 margin-bottom: -10px;
             }
             .title-line-2 { 
-                /* 中間的字稍微縮小，騰出空間 */
                 font-size: 4.5rem; 
                 margin: 0;
             }
             .title-line-3 { 
                 font-size: 1.3rem; 
-                /* 往右移更多，讓「得」對齊「南」的右引號 */
                 transform: translateX(60px); 
                 margin-top: -5px;
             }

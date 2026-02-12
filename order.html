@@ -3,469 +3,381 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>旅遊預點餐系統</title>
+    <title>旅遊行程點餐系統 (Firebase版)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
-        body { font-family: "Microsoft JhengHei", sans-serif; background: #f5f7fa; padding: 20px; max-width: 800px; margin: 0 auto; color: #333; }
-        h2 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
-        .sub-title { text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 20px; }
+        body { font-family: 'Microsoft JhengHei', sans-serif; background-color: #f8f9fa; }
+        .container { max-width: 800px; margin-top: 30px; }
+        .card { margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .time-display { font-weight: bold; color: #d9534f; }
         
-        /* 卡片樣式 */
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid #eee; }
-        .section-title { font-size: 1.4rem; font-weight: bold; color: #d35400; border-left: 5px solid #d35400; padding-left: 10px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
-        
-        /* 倒數計時條 */
-        .countdown-bar { background: #fdebd0; color: #d35400; padding: 8px 12px; border-radius: 5px; font-size: 0.9rem; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
-        .countdown-bar.expired { background: #bdc3c7; color: #7f8c8d; }
-
-        /* 家族篩選器 */
-        .family-selector { width: 100%; padding: 12px; font-size: 1.1rem; border: 2px solid #3498db; border-radius: 10px; background: white; margin-bottom: 15px; color: #2c3e50; font-weight: bold; }
-
-        /* 菜單列表 (Grid 排版，支援圖片) */
-        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        @media (min-width: 600px) { .menu-grid { grid-template-columns: 1fr 1fr; } }
-
-        .menu-item { display: flex; align-items: center; background: #fafafa; padding: 10px; border-radius: 10px; border: 1px solid #eee; }
-        .item-img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 15px; background: #ddd; }
-        .item-info { flex-grow: 1; }
-        .item-name { font-weight: bold; font-size: 1rem; color: #2c3e50; display: block; margin-bottom: 5px; }
-        
-        /* 輸入框與按鈕 */
-        input[type="number"] { padding: 8px; border: 1px solid #ccc; border-radius: 8px; font-size: 1.1rem; width: 50px; text-align: center; }
-        input[type="number"]:disabled { background: #eee; color: #aaa; border-color: #ddd; }
-
-        .btn-action { 
-            width: 100%; padding: 15px; border: none; border-radius: 50px; font-size: 1.3rem; font-weight: bold; cursor: pointer; margin-top: 10px; transition: all 0.3s; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        /* 確認狀態 (綠色) */
-        .btn-confirm { background: #27ae60; color: white; }
-        .btn-confirm:hover { background: #219150; }
-        
-        /* 修改狀態 (橘色) */
-        .btn-modify { background: #f39c12; color: white; }
-        .btn-modify:hover { background: #e67e22; }
-
-        /* 禁用狀態 */
-        .btn-disabled { background: #95a5a6 !important; cursor: not-allowed; box-shadow: none; }
-        
-        .btn-back { display: block; text-align: center; margin-top: 30px; color: #7f8c8d; text-decoration: none; padding: 10px; border-radius: 20px; border: 1px solid #ddd; background: white;}
-
-        /* 管理員入口 */
-        .admin-trigger { position: fixed; top: 10px; right: 10px; opacity: 0.2; font-size: 1.5rem; cursor: pointer; z-index: 999; }
-        
-        /* 管理後台樣式 */
-        #admin-panel { display: none; border: 2px solid #e74c3c; background: #fff5f5; margin-top: 30px; }
-        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #e74c3c; padding-bottom: 10px;}
-        
-        .admin-flex-container { display: flex; flex-wrap: wrap; gap: 20px; }
-        .admin-box { flex: 1 1 300px; background: white; padding: 15px; border-radius: 10px; border: 1px solid #ddd; }
-        .admin-box h4 { margin-top: 0; color: #d35400; border-bottom: 1px solid #eee; padding-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .lock-btn { padding: 5px 10px; font-size: 0.8rem; border-radius: 5px; border: none; cursor: pointer; color: white; }
-        .is-open { background: #27ae60; }
-        .is-locked { background: #c0392b; }
-
-        .stat-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed #eee; font-size: 0.95rem; }
-        .stat-count { font-weight: bold; color: #2980b9; }
+        /* 後台專用樣式 */
+        #backend-dashboard { display: none; background-color: #e9ecef; padding: 30px; min-height: 100vh; }
+        .backend-card { border-left: 5px solid #0d6efd; margin-bottom: 15px; background: white; padding: 15px; }
+        .stats-result-box { background: #fff; padding: 15px; border-radius: 5px; border: 1px solid #ccc; margin-top: 15px; }
     </style>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 <body>
 
-    <h2>🍜 預先點餐系統</h2>
-    <div class="sub-title">請選擇您的組別並完成點餐</div>
+<div id="frontend-app" class="container">
+    <h1 class="text-center mb-4">🚌 旅遊行程點餐系統</h1>
 
-    <div id="order-form">
-        <div class="card">
-            <label style="font-weight: bold; display: block; margin-bottom: 8px;">請問您是哪一家？</label>
-            <select id="family-group" class="family-selector">
-                <option value="" disabled selected>請選擇組別...</option>
-                <option value="太平">太平</option>
-                <option value="玲家">玲家</option>
-                <option value="杏家">杏家</option>
-                <option value="葵家">葵家</option>
-                <option value="Judy家">Judy家</option>
-                <option value="Jill家">Jill家</option>
-            </select>
-            
-            <label style="font-weight: bold; display: block; margin-bottom: 8px;">填寫人姓名：</label>
-            <input type="text" id="username" placeholder="請輸入您的名字" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box;">
-        </div>
-
-        <div class="card" id="card-day2">
-            <div class="section-title">DAY 2：弎弌-和茗園</div>
-            <div class="countdown-bar" id="timer-day2">
-                <span>⏳ 鎖單倒數：計算中...</span>
-                <span id="status-day2">開放中</span>
+    <div class="alert alert-info text-center">
+        <h5>⏰ 點餐倒數計時</h5>
+        <div class="row">
+            <div class="col-md-6">
+                <p>DAY 2 (2/20 10:30): <br><span id="timer-day2" class="time-display">計算中...</span></p>
             </div>
-            
-            <div class="menu-grid" id="menu-day2">
-                </div>
-        </div>
-
-        <div class="card" id="card-day3">
-            <div class="section-title">DAY 3：打貓廚房</div>
-            <div class="countdown-bar" id="timer-day3">
-                <span>⏳ 鎖單倒數：計算中...</span>
-                <span id="status-day3">開放中</span>
+            <div class="col-md-6">
+                <p>DAY 3 (2/21 10:30): <br><span id="timer-day3" class="time-display">計算中...</span></p>
             </div>
-
-            <div class="menu-grid" id="menu-day3">
-                </div>
         </div>
-
-        <button id="btn-action" class="btn-action btn-confirm">確認點餐</button>
-        <p style="text-align: center; color: #999; font-size: 0.8rem; margin-top: 10px;">點選確認後即完成送單，如需修改請再次點選按鈕。</p>
     </div>
 
-    <a href="index.html" class="btn-back">⬅ 回到行程表</a>
-
-    <div class="admin-trigger" onclick="openAdmin()">⚙️</div>
-
-    <div id="admin-panel" class="card">
-        <div class="admin-header">
-            <h3 style="margin:0;">📊 後台管理</h3>
-            <button onclick="document.getElementById('admin-panel').style.display='none'" style="border:none; background:none; font-size:1.2rem; cursor:pointer;">✖</button>
+    <div class="card p-4">
+        <h4>您的點餐資訊</h4>
+        <div class="mb-3">
+            <label class="form-label">您的姓名/家庭代號：</label>
+            <input type="text" id="user-name" class="form-control" placeholder="例如：王小明 (必填)">
         </div>
-        
-        <div class="admin-flex-container">
-            <div class="admin-box">
-                <h4>
-                    DAY 2 統計
-                    <button id="btn-lock-day2" class="lock-btn is-open">鎖定</button>
-                </h4>
-                <div id="stats-day2">載入中...</div>
-            </div>
 
-            <div class="admin-box">
-                <h4>
-                    DAY 3 統計
-                    <button id="btn-lock-day3" class="lock-btn is-open">鎖定</button>
-                </h4>
-                <div id="stats-day3">載入中...</div>
-            </div>
+        <hr>
+
+        <div class="mb-3">
+            <label class="form-label">DAY 2 餐點 (2/20)：</label>
+            <input type="text" id="input-day2" class="form-control day2-input" placeholder="請輸入餐點">
+            <small class="text-muted" id="status-day2">開放點餐中</small>
         </div>
-        <div style="margin-top: 15px; font-size: 0.9rem; color: #666;">總填單人數：<span id="total-orders-count">0</span> 人</div>
+
+        <div class="mb-3">
+            <label class="form-label">DAY 3 餐點 (2/21)：</label>
+            <input type="text" id="input-day3" class="form-control day3-input" placeholder="請輸入餐點">
+            <small class="text-muted" id="status-day3">開放點餐中</small>
+        </div>
+
+        <button onclick="submitOrder()" class="btn btn-primary w-100 btn-lg">送出 / 更新訂單</button>
+        <small class="text-muted text-center d-block mt-2">若需修改，請輸入相同姓名後更改內容並再次送出即可。</small>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getDatabase, ref, push, set, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    <div class="text-center mt-5 mb-5">
+        <button onclick="checkAdminPassword()" class="btn btn-outline-secondary btn-sm">🔒 管理員後台</button>
+    </div>
+</div>
 
-        // Firebase Config
-       const firebaseConfig = {
-  apiKey: "AIzaSyC_S8VS1Tgtjdh2eyavGR3jN2BmWF_Etg4",
-  authDomain: "tainan-trip-order.firebaseapp.com",
-  // ★★★ 請務必確認有加上這一行，這是您截圖中的資料庫網址 ★★★
-  databaseURL: "https://tainan-trip-order-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "tainan-trip-order",
-  storageBucket: "tainan-trip-order.firebasestorage.app",
-  messagingSenderId: "171271367128",
-  appId: "1:171271367128:web:91d2cb419a35902dec2aad",
-  measurementId: "G-Y8P3XCTS1Q"
-};
+<div id="backend-dashboard">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>⚙️ 後台管理統整系統</h2>
+            <button onclick="logoutBackend()" class="btn btn-danger">登出並返回前台</button>
+        </div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        <div class="card p-3 mb-4">
+            <h4>🔒 強制鎖定控制</h4>
+            <p class="text-muted small">點擊下方按鈕可強制鎖定或解鎖。此設定會即時同步給所有使用者。</p>
+            <div class="d-flex gap-3">
+                <button id="admin-btn-day2" onclick="toggleAdminLock('day2')" class="btn btn-secondary">讀取中...</button>
+                <button id="admin-btn-day3" onclick="toggleAdminLock('day3')" class="btn btn-secondary">讀取中...</button>
+            </div>
+        </div>
 
-        // --- 1. 菜單資料 (Day 2 & Day 3 分開) ---
-        // ★ 圖片說明：您可以將 'image' 欄位換成真實圖片網址，目前使用假圖佔位
-        const menuDay2 = [
-            { id: "d2_1", name: "招牌牛肉麵", image: "https://via.placeholder.com/100?text=Beef" },
-            { id: "d2_2", name: "鮮蝦餛飩麵", image: "https://via.placeholder.com/100?text=Wonton" },
-            { id: "d2_3", name: "古早味滷肉飯", image: "https://via.placeholder.com/100?text=Rice" },
-            { id: "d2_4", name: "燙青菜", image: "https://via.placeholder.com/100?text=Veg" }
-        ];
-
-        const menuDay3 = [
-            { id: "d3_1", name: "經典美式漢堡", image: "https://via.placeholder.com/100?text=Burger" },
-            { id: "d3_2", name: "松露野菇燉飯", image: "https://via.placeholder.com/100?text=Risotto" },
-            { id: "d3_3", name: "煙燻鮭魚沙拉", image: "https://via.placeholder.com/100?text=Salad" },
-            { id: "d3_4", name: "炸物拼盤", image: "https://via.placeholder.com/100?text=Fried" }
-        ];
-
-        // --- 2. 截止時間設定 (設定為 2026 年) ---
-        const DEADLINE_DAY2 = new Date("2026-02-20T10:30:00").getTime();
-        const DEADLINE_DAY3 = new Date("2026-02-21T10:30:00").getTime();
-
-        // 狀態變數
-        let isSubmitted = false; // 是否已確認點餐
-        let adminLockedDay2 = false; // 管理員手動鎖定 Day 2
-        let adminLockedDay3 = false; // 管理員手動鎖定 Day 3
-
-        // --- 3. 初始化畫面 ---
-        function renderMenu(containerId, data, dayPrefix) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            data.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'menu-item';
-                div.innerHTML = `
-                    <img src="${item.image}" class="item-img" alt="餐點圖片">
-                    <div class="item-info">
-                        <span class="item-name">${item.name}</span>
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>📋 各家點餐明細</h4>
+                        <span id="order-count" class="badge bg-secondary">0 筆訂單</span>
                     </div>
-                    <input type="number" min="0" class="qty-input ${dayPrefix}" 
-                           data-id="${item.id}" data-name="${item.name}" 
-                           data-day="${dayPrefix}" placeholder="0">
-                `;
-                container.appendChild(div);
-            });
-            
-            // 輸入框聚焦時清空 0
-            document.querySelectorAll('.qty-input').forEach(input => {
-                input.addEventListener('focus', function() { if(this.value=='0') this.value=''; });
-                input.addEventListener('blur', function() { if(this.value=='') this.value='0'; });
-            });
+                    <div id="all-orders-list" style="max-height: 600px; overflow-y: auto;">
+                        <div class="text-center text-muted mt-3">載入中...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="card p-3">
+                    <h4>📊 餐點數量統計</h4>
+                    <div class="d-grid gap-2 mb-3">
+                        <button onclick="calculateTotals('day2')" class="btn btn-warning">統整 DAY 2 (2/20) 數量</button>
+                        <button onclick="calculateTotals('day3')" class="btn btn-info">統整 DAY 3 (2/21) 數量</button>
+                    </div>
+                    
+                    <div id="stats-result" class="stats-result-box">
+                        <p class="text-center text-muted">請點擊上方按鈕查看統計結果...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyC_S8VS1Tgtjdh2eyavGR3jN2BmWF_Etg4",
+        authDomain: "tainan-trip-order.firebaseapp.com",
+        databaseURL: "https://tainan-trip-order-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "tainan-trip-order",
+        storageBucket: "tainan-trip-order.firebasestorage.app",
+        messagingSenderId: "171271367128",
+        appId: "1:171271367128:web:91d2cb419a35902dec2aad",
+        measurementId: "G-Y8P3XCTS1Q"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    // ================== 設定變數 ==================
+    // 設定截止時間 (2026年)
+    const DEADLINES = {
+        day2: new Date('2026-02-20T10:30:00').getTime(),
+        day3: new Date('2026-02-21T10:30:00').getTime()
+    };
+
+    // 全局變數儲存後台鎖定狀態
+    let adminLockState = {
+        day2: false,
+        day3: false
+    };
+
+    // 本地訂單快取 (用於統計)
+    let cachedOrders = {};
+
+    // ================== 核心邏輯：監聽鎖定狀態 ==================
+    // ★★★ 修正重點：監聽資料庫變動，確保「按下去有反應」且同步 ★★★
+    db.ref('adminSettings').on('value', (snapshot) => {
+        const val = snapshot.val();
+        if (val) {
+            adminLockState.day2 = val.day2Locked || false;
+            adminLockState.day3 = val.day3Locked || false;
+        } else {
+            // 初始化
+            adminLockState = { day2: false, day3: false };
         }
-
-        renderMenu('menu-day2', menuDay2, 'day2');
-        renderMenu('menu-day3', menuDay3, 'day3');
-
-        // --- 4. 倒數計時與自動鎖單邏輯 ---
-        function updateTimer() {
-            const now = new Date().getTime();
-            
-            // Day 2
-            const diff2 = DEADLINE_DAY2 - now;
-            const timerEl2 = document.getElementById('timer-day2');
-            const statusEl2 = document.getElementById('status-day2');
-            
-            if (diff2 <= 0 || adminLockedDay2) {
-                timerEl2.innerHTML = "🔒 DAY 2 已截止收單";
-                timerEl2.classList.add('expired');
-                disableSection('day2');
-            } else {
-                const h = Math.floor((diff2 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((diff2 % (1000 * 60 * 60)) / (1000 * 60));
-                timerEl2.querySelector('span').innerText = `⏳ 剩餘 ${h}小時 ${m}分`;
-                if(!isSubmitted) enableSection('day2'); // 只有在未送出且未過期時才開啟
-            }
-
-            // Day 3
-            const diff3 = DEADLINE_DAY3 - now;
-            const timerEl3 = document.getElementById('timer-day3');
-            
-            if (diff3 <= 0 || adminLockedDay3) {
-                timerEl3.innerHTML = "🔒 DAY 3 已截止收單";
-                timerEl3.classList.add('expired');
-                disableSection('day3');
-            } else {
-                const h = Math.floor((diff3 % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((diff3 % (1000 * 60 * 60)) / (1000 * 60));
-                timerEl3.querySelector('span').innerText = `⏳ 剩餘 ${h}小時 ${m}分`;
-                if(!isSubmitted) enableSection('day3');
-            }
-        }
-
-        function disableSection(dayClass) {
-            document.querySelectorAll(`.qty-input.${dayClass}`).forEach(input => {
-                input.disabled = true;
-            });
-        }
-
-        function enableSection(dayClass) {
-            // 只有在「修改模式」或「尚未送出」時才解鎖
-            if (!isSubmitted) {
-                document.querySelectorAll(`.qty-input.${dayClass}`).forEach(input => {
-                    input.disabled = false;
-                });
-            }
-        }
-
-        setInterval(updateTimer, 1000); // 每秒更新
-
-        // --- 5. Firebase 監聽管理員鎖單 ---
-        const configRef = ref(db, 'config');
-        onValue(configRef, (snapshot) => {
-            const config = snapshot.val() || {};
-            adminLockedDay2 = config.lockDay2 || false;
-            adminLockedDay3 = config.lockDay3 || false;
-            
-            updateTimer(); // 立即觸發狀態更新
-            updateAdminLockButtons(); // 更新後台按鈕狀態
-        });
-
-        // --- 6. 確認/修改按鈕邏輯 ---
-        const btnAction = document.getElementById('btn-action');
         
-        btnAction.addEventListener('click', () => {
-            const family = document.getElementById('family-group').value;
-            const name = document.getElementById('username').value.trim();
+        // 資料庫變動時，立即更新 UI (包含前台輸入框和後台按鈕)
+        updateAllUI();
+    });
 
-            if (!family) { alert("請選擇您的組別！"); return; }
-            if (!name) { alert("請輸入填寫人姓名！"); return; }
+    // 定時器 (每秒檢查時間)
+    setInterval(updateAllUI, 1000);
 
-            if (!isSubmitted) {
-                // === 目前是「確認點餐」狀態，執行送出 ===
-                
-                // 收集數據
-                let orderData = {
-                    family: family,
-                    name: name,
-                    timestamp: new Date().toLocaleString(),
-                    day2: {},
-                    day3: {}
-                };
+    // 統一 UI 更新函式
+    function updateAllUI() {
+        const now = new Date().getTime();
 
-                let hasItem = false;
-
-                // 收集 Day 2
-                document.querySelectorAll('.qty-input.day2').forEach(input => {
-                    const qty = parseInt(input.value) || 0;
-                    if (qty > 0) {
-                        orderData.day2[input.dataset.id] = { name: input.dataset.name, qty: qty };
-                        hasItem = true;
-                    }
-                });
-
-                // 收集 Day 3
-                document.querySelectorAll('.qty-input.day3').forEach(input => {
-                    const qty = parseInt(input.value) || 0;
-                    if (qty > 0) {
-                        orderData.day3[input.dataset.id] = { name: input.dataset.name, qty: qty };
-                        hasItem = true;
-                    }
-                });
-
-                if (!hasItem) { alert("您好像沒有點任何東西喔？"); return; }
-
-                // 儲存到 Firebase
-                // 這裡使用 push，但為了支援修改，理想上可以用 set 並以 name+family 當 key，
-                // 但為了簡單起見，我們先用 push (新增一筆)，並在前端鎖定輸入框。
-                // 若要嚴謹的「修改」需要知道上一筆的 key，這裡簡化為：再次點擊「確認」會新增一筆新的 (或覆蓋)。
-                // 為了讓邏輯簡單，我們假設這裡是 "更新最新狀態"
-                
-                // 這裡我們用一個簡單的 key 生成方式： Family_Name
-                const orderId = `${family}_${name}`;
-                set(ref(db, 'orders/' + orderId), orderData)
-                    .then(() => {
-                        alert("✅ 點餐成功！\n資料已送出，如需修改請點選「修改餐點」。");
-                        
-                        // 切換為已確認狀態
-                        isSubmitted = true;
-                        
-                        // 鎖定所有輸入框
-                        document.querySelectorAll('.qty-input').forEach(input => input.disabled = true);
-                        document.getElementById('family-group').disabled = true;
-                        document.getElementById('username').disabled = true;
-
-                        // 改變按鈕樣式
-                        btnAction.innerText = "✏️ 修改餐點";
-                        btnAction.className = "btn-action btn-modify";
-                    })
-                    .catch((err) => alert("送出失敗：" + err.message));
-
-            } else {
-                // === 目前是「修改餐點」狀態，執行解鎖 ===
-                const pwd = prompt("請輸入您的名字以確認修改："); // 簡單防護，防止誤按
-                if (pwd !== name) {
-                    alert("姓名不符，無法修改！");
-                    return;
-                }
-
-                isSubmitted = false;
-                
-                // 解鎖輸入框 (需判斷是否過期)
-                document.getElementById('family-group').disabled = false;
-                document.getElementById('username').disabled = false;
-                updateTimer(); // 讓 timer 函數去判斷哪些天可以解鎖
-
-                // 改變按鈕樣式
-                btnAction.innerText = "確認點餐";
-                btnAction.className = "btn-action btn-confirm";
-            }
-        });
-
-
-        // --- 7. 後台功能 ---
-        window.openAdmin = function() {
-            const pwd = prompt("請輸入管理員密碼：");
-            if (pwd === "8888") { 
-                document.getElementById('admin-panel').style.display = 'block';
-                document.getElementById('admin-panel').scrollIntoView({behavior: "smooth"});
-                loadAdminData(); 
-            } else {
-                if(pwd !== null) alert("密碼錯誤！");
-            }
-        };
-
-        // 後台鎖單按鈕
-        function updateAdminLockButtons() {
-            const btn2 = document.getElementById('btn-lock-day2');
-            const btn3 = document.getElementById('btn-lock-day3');
+        ['day2', 'day3'].forEach(day => {
+            const distance = DEADLINES[day] - now;
             
-            if(adminLockedDay2) {
-                btn2.innerText = "已鎖定 (點此解鎖)";
-                btn2.className = "lock-btn is-locked";
+            // 判斷是否被鎖定 (時間到 OR 管理員強制鎖)
+            const isTimeUp = distance < 0;
+            const isAdminLocked = adminLockState[day];
+            const isFinalLocked = isTimeUp || isAdminLocked;
+
+            // --- 更新前台 ---
+            const timerElem = document.getElementById(`timer-${day}`);
+            const inputElem = document.getElementById(`input-${day}`);
+            const statusElem = document.getElementById(`status-${day}`);
+
+            if (isFinalLocked) {
+                inputElem.disabled = true;
+                statusElem.classList.add('text-danger');
+                statusElem.innerText = isAdminLocked ? "⛔ 管理員已暫停點餐" : "🛑 已截止";
+                
+                if (isAdminLocked) {
+                    timerElem.innerText = "暫停點餐中";
+                } else {
+                    timerElem.innerText = "時間已到";
+                }
             } else {
-                btn2.innerText = "開放中 (點此鎖定)";
-                btn2.className = "lock-btn is-open";
+                // 如果沒被鎖，確保可以輸入 (解決「解鎖後沒反應」的問題)
+                inputElem.disabled = false;
+                statusElem.classList.remove('text-danger');
+                statusElem.innerText = "開放點餐中";
+
+                // 顯示倒數時間
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                timerElem.innerText = `${days}天 ${hours}時 ${minutes}分 ${seconds}秒`;
             }
 
-            if(adminLockedDay3) {
-                btn3.innerText = "已鎖定 (點此解鎖)";
-                btn3.className = "lock-btn is-locked";
-            } else {
-                btn3.innerText = "開放中 (點此鎖定)";
-                btn3.className = "lock-btn is-open";
+            // --- 更新後台按鈕狀態 ---
+            const adminBtn = document.getElementById(`admin-btn-${day}`);
+            if (adminBtn) {
+                if (isAdminLocked) {
+                    adminBtn.innerText = `DAY ${day.slice(-1)}：已強制鎖定 (點擊解鎖)`;
+                    adminBtn.className = "btn btn-danger w-100";
+                } else {
+                    adminBtn.innerText = `DAY ${day.slice(-1)}：開放中 (點擊鎖定)`;
+                    adminBtn.className = "btn btn-success w-100";
+                }
             }
+        });
+    }
+
+    // ================== 前台功能 ==================
+
+    function submitOrder() {
+        const name = document.getElementById('user-name').value.trim();
+        const d2 = document.getElementById('input-day2').value.trim();
+        const d3 = document.getElementById('input-day3').value.trim();
+
+        if (!name) { alert("請輸入姓名！"); return; }
+
+        // 檢查鎖定狀態，防止駭客或延遲送出
+        if (document.getElementById('input-day2').disabled && d2 !== "") {
+            alert("DAY 2 已經截止，無法送出該欄位。");
+            return;
+        }
+        if (document.getElementById('input-day3').disabled && d3 !== "") {
+            alert("DAY 3 已經截止，無法送出該欄位。");
+            return;
         }
 
-        document.getElementById('btn-lock-day2').addEventListener('click', () => {
-            update(ref(db, 'config'), { lockDay2: !adminLockedDay2 });
+        // 寫入 Firebase
+        // 使用 update 而不是 set，這樣如果只改其中一天，另一天不會被清空 (視需求而定，這裡用 update 較安全)
+        const updates = {};
+        if (!document.getElementById('input-day2').disabled) updates['day2'] = d2;
+        if (!document.getElementById('input-day3').disabled) updates['day3'] = d3;
+        
+        // 加上時間戳記
+        updates['lastUpdated'] = new Date().toLocaleString();
+
+        db.ref('orders/' + name).update(updates)
+            .then(() => {
+                alert("✅ 訂單已送出/更新！");
+            })
+            .catch((error) => {
+                alert("❌ 送出失敗：" + error.message);
+            });
+    }
+
+    // ================== 後台功能 ==================
+
+    // 1. 登入後台
+    function checkAdminPassword() {
+        const pwd = prompt("請輸入管理員密碼：");
+        if (pwd === "8888") { // 您可以自行修改密碼
+            document.getElementById('frontend-app').style.display = 'none';
+            document.getElementById('backend-dashboard').style.display = 'block';
+            
+            // 載入訂單資料
+            initBackendData();
+        } else {
+            alert("密碼錯誤");
+        }
+    }
+
+    // 2. 登出
+    function logoutBackend() {
+        document.getElementById('backend-dashboard').style.display = 'none';
+        document.getElementById('frontend-app').style.display = 'block';
+    }
+
+    // 3. 切換鎖定狀態 (寫入 Firebase)
+    function toggleAdminLock(day) {
+        // 讀取當前狀態並反轉
+        const currentStatus = adminLockState[day];
+        const newStatus = !currentStatus;
+
+        // 更新資料庫 (這會觸發上面的 .on('value') 監聽器，進而更新 UI)
+        db.ref('adminSettings').update({
+            [`${day}Locked`]: newStatus
+        }).then(() => {
+            console.log(`${day} lock status updated to ${newStatus}`);
+        }).catch(err => {
+            alert("更新失敗：" + err.message);
         });
+    }
 
-        document.getElementById('btn-lock-day3').addEventListener('click', () => {
-            update(ref(db, 'config'), { lockDay3: !adminLockedDay3 });
+    // 4. 載入並監聽訂單資料
+    function initBackendData() {
+        const listContainer = document.getElementById('all-orders-list');
+        
+        db.ref('orders').on('value', (snapshot) => {
+            listContainer.innerHTML = "";
+            cachedOrders = snapshot.val() || {}; // 存入快取供統計使用
+            
+            const count = Object.keys(cachedOrders).length;
+            document.getElementById('order-count').innerText = `${count} 筆訂單`;
+
+            if (count === 0) {
+                listContainer.innerHTML = "<p class='text-center text-muted'>尚無資料</p>";
+                return;
+            }
+
+            Object.entries(cachedOrders).forEach(([name, data]) => {
+                const card = document.createElement('div');
+                card.className = "backend-card";
+                card.innerHTML = `
+                    <h5 class="fw-bold">👤 ${name}</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <span class="badge bg-primary mb-1">DAY 2</span>
+                            <div class="text-dark">${data.day2 || '<span class="text-muted">未填</span>'}</div>
+                        </div>
+                        <div class="col-6">
+                            <span class="badge bg-info text-dark mb-1">DAY 3</span>
+                            <div class="text-dark">${data.day3 || '<span class="text-muted">未填</span>'}</div>
+                        </div>
+                    </div>
+                    <small class="text-muted d-block mt-2 text-end">更新於: ${data.lastUpdated || '未知'}</small>
+                `;
+                listContainer.appendChild(card);
+            });
         });
+    }
 
-        // 後台數據統計
-        function loadAdminData() {
-            onValue(ref(db, 'orders'), (snapshot) => {
-                const orders = snapshot.val();
-                if (!orders) {
-                    document.getElementById('stats-day2').innerText = "尚無訂單";
-                    document.getElementById('stats-day3').innerText = "尚無訂單";
-                    return;
-                }
+    // 5. 統計功能
+    function calculateTotals(day) {
+        const resultDiv = document.getElementById('stats-result');
+        const counts = {};
+        let totalItems = 0;
 
-                let countDay2 = {};
-                let countDay3 = {};
-                let userCount = 0;
-
-                Object.values(orders).forEach(order => {
-                    userCount++;
-                    // 統計 Day 2
-                    if (order.day2) {
-                        Object.values(order.day2).forEach(item => {
-                            countDay2[item.name] = (countDay2[item.name] || 0) + item.qty;
-                        });
-                    }
-                    // 統計 Day 3
-                    if (order.day3) {
-                        Object.values(order.day3).forEach(item => {
-                            countDay3[item.name] = (countDay3[item.name] || 0) + item.qty;
-                        });
+        // 遍歷快取的訂單
+        Object.values(cachedOrders).forEach(order => {
+            const itemsStr = order[day];
+            if (itemsStr && itemsStr.trim() !== "") {
+                // 支援用逗號、頓號或空格分隔多個餐點 (例如 "牛肉麵, 奶茶")
+                const items = itemsStr.split(/[,，\s]+/);
+                
+                items.forEach(item => {
+                    const itemName = item.trim();
+                    if (itemName) {
+                        counts[itemName] = (counts[itemName] || 0) + 1;
+                        totalItems++;
                     }
                 });
+            }
+        });
 
-                document.getElementById('total-orders-count').innerText = userCount;
-
-                // 渲染 Day 2 統計
-                let html2 = "";
-                for (const [name, qty] of Object.entries(countDay2)) {
-                    html2 += `<div class="stat-row"><span>${name}</span><span class="stat-count">${qty}</span></div>`;
-                }
-                document.getElementById('stats-day2').innerHTML = html2 || "無資料";
-
-                // 渲染 Day 3 統計
-                let html3 = "";
-                for (const [name, qty] of Object.entries(countDay3)) {
-                    html3 += `<div class="stat-row"><span>${name}</span><span class="stat-count">${qty}</span></div>`;
-                }
-                document.getElementById('stats-day3').innerHTML = html3 || "無資料";
-            });
+        // 顯示結果
+        if (totalItems === 0) {
+            resultDiv.innerHTML = `<h5 class="text-center">尚無 ${day.toUpperCase()} 資料</h5>`;
+            return;
         }
-    </script>
+
+        let html = `<h5 class="text-primary border-bottom pb-2">📊 ${day.toUpperCase()} 統計結果</h5>`;
+        html += `<ul class="list-group list-group-flush">`;
+        
+        for (const [name, count] of Object.entries(counts)) {
+            html += `<li class="list-group-item d-flex justify-content-between align-items-center">
+                        ${name}
+                        <span class="badge bg-primary rounded-pill">${count}</span>
+                     </li>`;
+        }
+        html += `</ul>`;
+        html += `<div class="mt-3 text-end fw-bold">總份數: ${totalItems}</div>`;
+        
+        resultDiv.innerHTML = html;
+    }
+</script>
+
 </body>
 </html>

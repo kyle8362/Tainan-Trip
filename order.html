@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>旅遊預點餐系統</title>
+    <style>
+        body { font-family: "Microsoft JhengHei", sans-serif; background: #f5f7fa; padding: 20px; max-width: 600px; margin: 0 auto; }
+        h2 { text-align: center; color: #2c3e50; margin-bottom: 10px; }
+        .sub-title { text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 20px; }
+        
+        /* 卡片樣式 */
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        
+        /* 菜單列表 */
+        .menu-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed #ddd; padding: 15px 0; }
+        .menu-item:last-child { border-bottom: none; }
+        .item-info { flex-grow: 1; padding-right: 10px; }
+        .item-name { font-weight: bold; font-size: 1.1rem; display: block; color: #333; }
+        .item-price { color: #e67e22; font-weight: bold; }
+        
+        /* 輸入框與按鈕 */
+        input[type="text"], input[type="number"] { padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 1rem; }
+        .qty-input { width: 60px; text-align: center; font-weight: bold; }
+        
+        .btn-submit { 
+            width: 100%; padding: 15px; background: #27ae60; color: white; 
+            border: none; border-radius: 50px; font-size: 1.2rem; font-weight: bold;
+            cursor: pointer; margin-top: 15px; transition: all 0.3s; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-submit:active { transform: scale(0.98); }
+        .btn-submit:disabled { background: #95a5a6; cursor: not-allowed; box-shadow: none; }
+        
+        .btn-back { display: block; text-align: center; margin-top: 30px; color: #7f8c8d; text-decoration: none; padding: 10px; border-radius: 20px; border: 1px solid #ddd; background: white;}
+
+        /* 狀態列 */
+        #status-msg { text-align: center; padding: 10px; background: #ffeaa7; border-radius: 8px; margin-bottom: 15px; font-weight: bold; color: #d35400; display: none; }
+
+        /* 管理員隱藏入口 (右上角) */
+        .admin-trigger { position: fixed; top: 10px; right: 10px; opacity: 0.2; font-size: 1.5rem; cursor: pointer; z-index: 999; }
+        
+        /* 管理後台樣式 */
+        #admin-panel { display: none; border: 2px solid #e74c3c; background: #fff5f5; }
+        .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #e74c3c; padding-bottom: 10px;}
+        .btn-lock { padding: 8px 20px; border-radius: 5px; border: none; cursor: pointer; color: white; font-weight: bold; }
+        .is-unlocked { background: #27ae60; } 
+        .is-locked { background: #c0392b; } 
+        
+        .stat-item { display: flex; justify-content: space-between; margin: 8px 0; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .total-row { font-weight: bold; font-size: 1.3rem; color: #c0392b; margin-top: 15px; border-top: 2px solid #333; padding-top: 10px; text-align: right;}
+    </style>
+</head>
+<body>
+
+    <h2>🍜 預先點餐系統</h2>
+    <div class="sub-title">大家先點好，去到現場直接吃！</div>
+    
+    <div id="status-msg">⚠️ 目前已停止收單</div>
+
+    <div id="order-section" class="card">
+        <div style="margin-bottom: 20px;">
+            <label style="font-weight: bold; display: block; margin-bottom: 5px;">您的姓名：</label>
+            <input type="text" id="username" placeholder="請輸入名字 (例如: 帥哥智)" style="width: 90%;">
+        </div>
+        <hr style="border: 0; border-top: 2px solid #eee;">
+        
+        <div id="menu-list">
+            </div>
+
+        <div style="text-align: right; margin-top: 20px; font-size: 1.2rem; font-weight: bold; color: #2c3e50;">
+            總金額：<span style="color: #e74c3c;">$</span><span id="current-total" style="color: #e74c3c; font-size: 1.5rem;">0</span>
+        </div>
+        
+        <button id="btn-submit" class="btn-submit">送出訂單</button>
+    </div>
+
+    <a href="index.html" class="btn-back">⬅ 回到行程表</a>
+
+    <div class="admin-trigger" onclick="openAdmin()">⚙️</div>
+
+    <div id="admin-panel" class="card">
+        <div class="admin-header">
+            <h3 style="margin:0;">📊 點餐統計後台</h3>
+            <button id="btn-toggle-lock" class="btn-lock is-unlocked">鎖定狀態讀取中...</button>
+        </div>
+        <div id="admin-stats" style="line-height: 1.6;">資料載入中...</div>
+    </div>
+
+    <script type="module">
+        // 引入 Firebase SDK
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, push, set, onValue, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // ★★★ 您的專屬設定檔 ★★★
+        const firebaseConfig = {
+            apiKey: "AIzaSyC_S8VS1Tgtjdh2eyavGR3jN2BmWF_Etg4",
+            authDomain: "tainan-trip-order.firebaseapp.com",
+            projectId: "tainan-trip-order",
+            storageBucket: "tainan-trip-order.firebasestorage.app",
+            messagingSenderId: "171271367128",
+            appId: "1:171271367128:web:91d2cb419a35902dec2aad",
+            measurementId: "G-Y8P3XCTS1Q"
+        };
+
+        // 初始化 Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // --- 1. 菜單設定 (您可以隨時在這裡修改菜單) ---
+        const menuData = [
+            { id: "item_1", name: "招牌牛肉麵", price: 150 },
+            { id: "item_2", name: "鮮蝦餛飩麵", price: 100 },
+            { id: "item_3", name: "古早味滷肉飯", price: 45 },
+            { id: "item_4", name: "燙青菜", price: 40 },
+            { id: "item_5", name: "滷味拼盤", price: 60 },
+            { id: "item_6", name: "冰鎮紅茶", price: 25 }
+        ];
+
+        // --- 2. 前端邏輯 ---
+        const menuListEl = document.getElementById('menu-list');
+        const currentTotalEl = document.getElementById('current-total');
+        const btnSubmit = document.getElementById('btn-submit');
+        const statusMsg = document.getElementById('status-msg');
+        let orderItems = {}; 
+
+        // 初始化菜單畫面
+        function renderMenu() {
+            menuListEl.innerHTML = '';
+            menuData.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'menu-item';
+                div.innerHTML = `
+                    <div class="item-info">
+                        <span class="item-name">${item.name}</span>
+                        <span class="item-price">$${item.price}</span>
+                    </div>
+                    <input type="number" min="0" class="qty-input" data-id="${item.id}" data-name="${item.name}" data-price="${item.price}" placeholder="0">
+                `;
+                menuListEl.appendChild(div);
+            });
+
+            // 綁定輸入事件計算金額
+            document.querySelectorAll('.qty-input').forEach(input => {
+                input.addEventListener('input', calculateTotal);
+                input.addEventListener('focus', function() { if(this.value=='0') this.value=''; }); // 點擊清空0
+                input.addEventListener('blur', function() { if(this.value=='') this.value=''; });
+            });
+        }
+
+        function calculateTotal() {
+            let total = 0;
+            orderItems = {}; 
+            document.querySelectorAll('.qty-input').forEach(input => {
+                const qty = parseInt(input.value) || 0;
+                if (qty > 0) {
+                    const price = parseInt(input.dataset.price);
+                    const id = input.dataset.id;
+                    const name = input.dataset.name;
+                    total += qty * price;
+                    orderItems[id] = { name: name, qty: qty, price: price };
+                }
+            });
+            currentTotalEl.innerText = total;
+        }
+
+        renderMenu();
+
+        // --- 3. Firebase 監聽鎖單狀態 ---
+        const configRef = ref(db, 'config/isLocked');
+        onValue(configRef, (snapshot) => {
+            const isLocked = snapshot.val();
+            const toggleBtn = document.getElementById('btn-toggle-lock');
+            
+            if (isLocked) {
+                // 鎖定狀態
+                statusMsg.style.display = 'block';
+                btnSubmit.disabled = true;
+                btnSubmit.innerText = "🚫 已截止收單";
+                btnSubmit.style.background = "#95a5a6";
+                // 後台按鈕
+                if(toggleBtn) {
+                    toggleBtn.innerText = "目前：已鎖定 (點此解鎖)";
+                    toggleBtn.className = "btn-lock is-locked";
+                }
+            } else {
+                // 開放狀態
+                statusMsg.style.display = 'none';
+                btnSubmit.disabled = false;
+                btnSubmit.innerText = "送出訂單";
+                btnSubmit.style.background = "#27ae60";
+                // 後台按鈕
+                if(toggleBtn) {
+                    toggleBtn.innerText = "目前：開放中 (點此鎖定)";
+                    toggleBtn.className = "btn-lock is-unlocked";
+                }
+            }
+        });
+
+        // --- 4. 送出訂單 ---
+        btnSubmit.addEventListener('click', () => {
+            const name = document.getElementById('username').value.trim();
+            const total = parseInt(currentTotalEl.innerText);
+
+            if (!name) { alert("請輸入您的姓名！"); return; }
+            if (total === 0) { alert("您還沒有點任何東西喔！"); return; }
+
+            // 雙重確認鎖單狀態
+            get(configRef).then((snapshot) => {
+                if (snapshot.val() === true) {
+                    alert("抱歉，剛剛已經截止收單了！");
+                    return;
+                }
+
+                // 準備資料
+                const newOrder = {
+                    name: name,
+                    items: orderItems,
+                    totalPrice: total,
+                    timestamp: new Date().toLocaleString()
+                };
+
+                // 推送到 Firebase
+                push(ref(db, 'orders'), newOrder)
+                    .then(() => {
+                        alert(`訂單送出成功！\n${name} 總共 $${total}`);
+                        // 清空表單
+                        document.getElementById('username').value = '';
+                        document.querySelectorAll('.qty-input').forEach(input => input.value = '');
+                        calculateTotal();
+                    })
+                    .catch((error) => {
+                        alert("送出失敗，請檢查網路連線。\n" + error.message);
+                    });
+            });
+        });
+
+        // --- 5. 管理員後台邏輯 ---
+        window.openAdmin = function() {
+            const pwd = prompt("請輸入管理員密碼：");
+            if (pwd === "8888") { // ★ 預設密碼 8888，可自行修改
+                document.getElementById('admin-panel').style.display = 'block';
+                // 自動捲動到後台
+                document.getElementById('admin-panel').scrollIntoView({behavior: "smooth"});
+                loadAdminData(); 
+            } else {
+                if(pwd !== null) alert("密碼錯誤！");
+            }
+        };
+
+        // 切換鎖單
+        document.getElementById('btn-toggle-lock').addEventListener('click', () => {
+            get(configRef).then((snapshot) => {
+                const currentStatus = snapshot.val() || false;
+                set(configRef, !currentStatus);
+            });
+        });
+
+        // 計算統計
+        function loadAdminData() {
+            const ordersRef = ref(db, 'orders');
+            onValue(ordersRef, (snapshot) => {
+                const orders = snapshot.val();
+                if (!orders) {
+                    document.getElementById('admin-stats').innerText = "目前沒有訂單。";
+                    return;
+                }
+
+                let itemCounts = {}; 
+                let grandTotal = 0;
+                let orderCount = 0;
+                let orderDetails = "";
+
+                // 遍歷訂單
+                Object.values(orders).forEach(order => {
+                    orderCount++;
+                    grandTotal += order.totalPrice;
+                    
+                    // 統計品項
+                    if (order.items) {
+                        Object.values(order.items).forEach((item) => {
+                            if (!itemCounts[item.name]) itemCounts[item.name] = 0;
+                            itemCounts[item.name] += item.qty;
+                        });
+                    }
+                    // 訂單明細 (除錯用，可不顯示)
+                    // orderDetails += `${order.name}: $${order.totalPrice}<br>`;
+                });
+
+                // 產生 HTML
+                let html = `<div style="margin-bottom:10px; font-weight:bold;">總單數：${orderCount} 筆</div>`;
+                
+                // 顯示品項統計
+                for (const [name, qty] of Object.entries(itemCounts)) {
+                    html += `
+                        <div class="stat-item">
+                            <span>${name}</span>
+                            <span style="font-weight:bold; color:#2980b9;">x ${qty}</span>
+                        </div>
+                    `;
+                }
+
+                html += `<div class="total-row">💰 總金額：$${grandTotal}</div>`;
+                document.getElementById('admin-stats').innerHTML = html;
+            });
+        }
+    </script>
+</body>
+</html>

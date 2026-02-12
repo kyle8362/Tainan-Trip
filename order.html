@@ -7,10 +7,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <style>
-        body { font-family: 'Microsoft JhengHei', sans-serif; background-color: #f8f9fa; padding-bottom: 100px; }
+        body { font-family: 'Microsoft JhengHei', sans-serif; background-color: #f8f9fa; padding-bottom: 120px; }
         .container { max-width: 900px; margin-top: 20px; }
         
-        /* 圖片菜單卡片樣式 */
+        /* 一般菜單卡片 (有圖) */
         .menu-item-card { 
             border: 1px solid #ddd; 
             border-radius: 12px; 
@@ -28,6 +28,13 @@
             object-fit: cover; 
             background-color: #f0f0f0;
         }
+        
+        /* DAY3 無圖卡片樣式 */
+        .no-img-card .menu-img { display: none; }
+        .no-img-card .menu-body { padding: 15px; text-align: left; display: flex; align-items: center; justify-content: space-between; }
+        .no-img-card .menu-title { font-size: 1.1rem; margin: 0; }
+        .no-img-card .quantity-control { margin-top: 0; }
+
         .menu-body { padding: 15px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
         .menu-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; color: #333; }
         
@@ -36,33 +43,26 @@
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            gap: 15px; 
+            gap: 10px; 
             margin-top: auto; 
         }
         .qty-btn { 
-            width: 35px; 
-            height: 35px; 
-            border-radius: 50%; 
-            border: 1px solid #ced4da; 
-            background: #fff; 
-            font-weight: bold;
-            font-size: 1.2rem;
-            line-height: 32px;
-            padding: 0;
-            color: #0d6efd;
-            transition: all 0.2s;
+            width: 32px; height: 32px; 
+            border-radius: 50%; border: 1px solid #ced4da; 
+            background: #fff; font-weight: bold; font-size: 1.2rem; 
+            line-height: 28px; padding: 0; color: #0d6efd; 
         }
-        .qty-btn:active { background: #e9ecef; transform: scale(0.95); }
-        .qty-btn:disabled { color: #ccc; border-color: #eee; cursor: not-allowed; }
-        .qty-display { min-width: 30px; font-weight: bold; font-size: 1.2rem; }
+        .qty-btn:active { background: #e9ecef; }
+        .qty-btn:disabled { color: #ccc; border-color: #eee; }
+        .qty-display { min-width: 30px; text-align: center; font-weight: bold; font-size: 1.2rem; }
 
-        /* 分類標題樣式 */
+        /* 分類標題 */
         .category-header {
             width: 100%;
             background-color: #e3f2fd;
             color: #0d6efd;
             padding: 10px 15px;
-            margin-top: 20px;
+            margin-top: 25px;
             margin-bottom: 15px;
             border-radius: 8px;
             font-weight: bold;
@@ -70,51 +70,34 @@
             border-left: 5px solid #0d6efd;
         }
         
-        /* 分頁按鈕樣式 (大按鈕) */
+        /* 分頁按鈕 */
         .nav-pills { gap: 10px; }
         .nav-pills .nav-link { 
-            border-radius: 10px; 
-            padding: 15px; 
-            background-color: #e9ecef;
-            color: #495057;
-            border: 2px solid transparent;
-            text-align: center;
+            border-radius: 10px; padding: 15px; 
+            background-color: #e9ecef; color: #495057; 
+            text-align: center; border: 2px solid transparent;
         }
         .nav-pills .nav-link.active { 
-            background-color: #fff; 
-            color: #0d6efd; 
-            border-color: #0d6efd;
+            background-color: #fff; color: #0d6efd; 
+            border-color: #0d6efd; 
             box-shadow: 0 4px 6px rgba(13, 110, 253, 0.1);
         }
-        .timer-text {
-            display: block;
-            font-size: 0.9rem;
-            margin-top: 5px;
-            color: #dc3545;
-            font-weight: bold;
-        }
+        .timer-text { display: block; font-size: 0.9rem; margin-top: 5px; color: #dc3545; font-weight: bold; }
 
-        /* 底部固定送出列 */
+        /* 底部固定列 */
         .fixed-bottom-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(5px);
-            padding: 15px;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
-            z-index: 1000;
-            border-top: 1px solid #eee;
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(5px);
+            padding: 15px; box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+            z-index: 1000; border-top: 1px solid #eee;
         }
 
         /* 鎖定遮罩 */
-        .locked-overlay { position: relative; opacity: 0.6; pointer-events: none; }
-        .tab-pane.locked-overlay::before {
-            content: "";
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 10;
-        }
+        .locked-overlay { opacity: 0.6; pointer-events: none; position: relative; }
+        
+        /* 圖片 Modal 樣式 */
+        .modal-img-container { text-align: center; }
+        .modal-img-container img { max-width: 100%; height: auto; border-radius: 5px; }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -126,14 +109,14 @@
     
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold m-0">🚌 旅遊行程點餐系統</h2>
-        <a href="index.html" class="btn btn-outline-secondary btn-sm">↩ 返回行程表</a>
+        <a href="#" class="btn btn-outline-secondary btn-sm">↩ 返回行程表</a>
     </div>
 
     <div class="card p-4 mb-4 shadow-sm" style="border-left: 5px solid #ffc107;">
         <label class="form-label fw-bold fs-5">🏠 請先選擇您的家庭代號：</label>
         <select id="user-select" class="form-select form-select-lg" onchange="loadUserOrder()">
             <option value="" disabled selected>-- 請選擇 --</option>
-            </select>
+        </select>
     </div>
 
     <ul class="nav nav-pills nav-fill mb-4" id="pills-tab" role="tablist">
@@ -152,9 +135,20 @@
     </ul>
 
     <div class="tab-content" id="pills-tabContent">
+        
         <div class="tab-pane fade show active" id="pills-day2" role="tabpanel">
+            
+            <div class="text-center mb-3">
+                <button type="button" class="btn btn-warning shadow-sm" data-bs-toggle="modal" data-bs-target="#menuImageModal">
+                    📸 不看圖片不會點 (點我看菜單圖)
+                </button>
+            </div>
+
             <div id="menu-container-day2" class="row g-3">
                 </div>
+            <div class="alert alert-warning mt-3 small">
+                💡 提醒：每一份套餐請務必在下方「搭配飲料」區選擇一份飲品。
+            </div>
         </div>
         
         <div class="tab-pane fade" id="pills-day3" role="tabpanel">
@@ -167,7 +161,6 @@
         <div class="container" style="max-width: 900px;">
             <div class="d-flex justify-content-between align-items-center mb-2">
                 <span id="current-selection-info" class="text-primary fw-bold">尚未選擇餐點</span>
-                <small class="text-muted" id="status-msg"></small>
             </div>
             <button onclick="submitOrder()" class="btn btn-primary w-100 btn-lg shadow rounded-pill">確認送出 / 更新訂單 ✅</button>
         </div>
@@ -175,6 +168,20 @@
 
     <div class="text-center mt-5 mb-5">
         <button onclick="checkAdminPassword()" class="btn btn-link text-secondary btn-sm" style="text-decoration: none;">🔒 管理員後台</button>
+    </div>
+</div>
+
+<div class="modal fade" id="menuImageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title fw-bold">📸 弎弌-和茗園 菜單參考</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body modal-img-container">
+                <img id="modal-menu-img" src="" alt="菜單照片">
+            </div>
+        </div>
     </div>
 </div>
 
@@ -188,23 +195,35 @@
         <div class="card p-3 mb-4">
             <h4>🔒 鎖定控制</h4>
             <div class="d-flex gap-3">
-                <button id="admin-btn-day2" onclick="toggleAdminLock('day2')" class="btn btn-secondary w-50">讀取中...</button>
-                <button id="admin-btn-day3" onclick="toggleAdminLock('day3')" class="btn btn-secondary w-50">讀取中...</button>
+                <button id="admin-btn-day2" onclick="toggleAdminLock('day2')" class="btn btn-success w-50">讀取中...</button>
+                <button id="admin-btn-day3" onclick="toggleAdminLock('day3')" class="btn btn-success w-50">讀取中...</button>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-7">
                 <div class="card p-3 mb-3">
-                    <h4>📋 各家點餐明細</h4>
-                    <div id="all-orders-list" style="max-height: 500px; overflow-y: auto;">載入中...</div>
+                    <h4>📋 各家點餐明細 (可編輯)</h4>
+                    <div id="all-orders-list" style="max-height: 600px; overflow-y: auto;">載入中...</div>
                 </div>
             </div>
+            
             <div class="col-md-5">
                 <div class="card p-3">
                     <h4>📊 數量統計</h4>
+                    
                     <button onclick="calculateTotals('day2')" class="btn btn-warning mb-2 w-100">統計 DAY 2 (弎弌)</button>
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">DAY 2 後台備註：</label>
+                        <textarea id="note-day2" class="form-control form-control-sm" rows="2" placeholder="輸入備註後自動儲存..." onchange="saveAdminNote('day2')"></textarea>
+                    </div>
+
                     <button onclick="calculateTotals('day3')" class="btn btn-info w-100">統計 DAY 3 (打貓)</button>
+                    <div class="mb-3">
+                        <label class="form-label small text-muted">DAY 3 後台備註：</label>
+                        <textarea id="note-day3" class="form-control form-control-sm" rows="2" placeholder="輸入備註後自動儲存..." onchange="saveAdminNote('day3')"></textarea>
+                    </div>
+
                     <div id="stats-result" class="mt-3 p-2 border bg-white rounded"></div>
                 </div>
             </div>
@@ -214,58 +233,81 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // ================== 1. 資料設定區 ==================
+    // ================== 設定區 ==================
     
-    // 家庭代號清單 (已更新)
+    // ★★★ 請在此填入您的菜單圖片網址 (Imgur 或 Drive 公開連結) ★★★
+    // 範例使用假圖，請務必更換
+    const MENU_IMG_URL = "https://scontent.ftpe8-1.fna.fbcdn.net/v/t51.82787-15/629702184_18073429154617664_2483133985369412611_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=i1dwap3YvBoQ7kNvwEU42j9&_nc_oc=AdlaTfoNJPhaeA4I2c3MLNNGpOuPQw-ZkvTrmrl94NKqb3rtYV6KkxChE8RnneX7E9Y&_nc_zt=23&_nc_ht=scontent.ftpe8-1.fna&_nc_gid=BEYxSXBR6YIOsmPzwHfwSQ&oh=00_AfsAqkZX19l-udQ95f1iphVnVXEXM1dcKk1CmwIVJUiE4Q&oe=6993830A"; 
+    document.getElementById('modal-menu-img').src = MENU_IMG_URL;
+
+    // 家庭代號
     const FAMILIES = ["太平", "玲家", "杏家", "葵家", "Judy家", "Jill家"];
 
     // 菜單資料
     const MENU_DATA = {
-        // DAY 2: 弎弌-和茗園 (請在此處填入真實菜單，目前使用範例)
+        // DAY 2: 弎弌-和茗園 (複雜結構)
         day2: [
-            { id: "d2_1", category: "主食", name: "招牌餐點範例 A", img: "https://placehold.co/300x200?text=Menu+A" },
-            { id: "d2_2", category: "主食", name: "招牌餐點範例 B", img: "https://placehold.co/300x200?text=Menu+B" },
-            { id: "d2_3", category: "飲品", name: "冷泡茶", img: "https://placehold.co/300x200?text=Tea" }
-        ],
-        // DAY 3: 打貓廚房 (已依照您的需求完整建立)
-        day3: [
-            // (1) 打貓雞翅
-            { id: "d3_w1", category: "🍗 (1) 打貓雞翅", name: "原味雞翅", img: "https://placehold.co/300x200?text=Original+Wings" },
-            { id: "d3_w2", category: "🍗 (1) 打貓雞翅", name: "是拉差雞翅", img: "https://placehold.co/300x200?text=Sriracha+Wings" },
+            // (1) 主餐 - 麵類
+            { id: "d2_m1_1", category: "🍜 (1) 主餐：麵麵俱到套餐", name: "香蔥苦茶油蕎麥麵", img: "https://placehold.co/300x200?text=Noodle+Oil" },
+            { id: "d2_m1_2", category: "🍜 (1) 主餐：麵麵俱到套餐", name: "蕎麥冷麵沾古茶", img: "https://placehold.co/300x200?text=Cold+Noodle" },
             
-            // (2) 主餐
-            { id: "d3_m1", category: "🥪 (2) 主餐", name: "費城牛肉起司三明治", img: "https://placehold.co/300x200?text=Philly+Cheesesteak" },
-            { id: "d3_m2", category: "🥪 (2) 主餐", name: "慢烤手撕豬三明治", img: "https://placehold.co/300x200?text=Pulled+Pork" },
-            { id: "d3_m3", category: "🥪 (2) 主餐", name: "烤迷迭香雞腿排三明治", img: "https://placehold.co/300x200?text=Rosemary+Chicken" },
+            // (1-B) 麵類搭配飲料 (必選)
+            { id: "d2_d1_1", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹生茶(熱)", img: "https://placehold.co/300x200?text=Tea+Hot" },
+            { id: "d2_d1_2", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹生茶(冰)", img: "https://placehold.co/300x200?text=Tea+Ice" },
+            { id: "d2_d1_3", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹熟茶(熱)", img: "https://placehold.co/300x200?text=Black+Tea+Hot" },
+            { id: "d2_d1_4", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹熟茶(冰)", img: "https://placehold.co/300x200?text=Black+Tea+Ice" },
 
-            // (3) 飲料
-            { id: "d3_d1", category: "🥤 (3) 飲料", name: "可樂", img: "https://placehold.co/300x200?text=Coke" },
-            { id: "d3_d2", category: "🥤 (3) 飲料", name: "雪碧", img: "https://placehold.co/300x200?text=Sprite" },
-            { id: "d3_d3", category: "🥤 (3) 飲料", name: "手拉生啤", img: "https://placehold.co/300x200?text=Draft+Beer" },
-            { id: "d3_d4", category: "🥤 (3) 飲料", name: "鮮榨柳橙汁", img: "https://placehold.co/300x200?text=Orange+Juice" },
-            { id: "d3_d5", category: "🥤 (3) 飲料", name: "柳橙鳳蘋汁", img: "https://placehold.co/300x200?text=Mixed+Juice" },
-            { id: "d3_d6", category: "🥤 (3) 飲料", name: "葡萄柚汁", img: "https://placehold.co/300x200?text=Grapefruit" },
-            { id: "d3_d7", category: "🥤 (3) 飲料", name: "高山烏龍茶(熱)", img: "https://placehold.co/300x200?text=Hot+Oolong" },
-            { id: "d3_d8", category: "🥤 (3) 飲料", name: "高山烏龍茶(冰)", img: "https://placehold.co/300x200?text=Iced+Oolong" },
-            { id: "d3_d9", category: "🥤 (3) 飲料", name: "蜜香紅茶(熱)", img: "https://placehold.co/300x200?text=Hot+Black+Tea" },
-            { id: "d3_d10", category: "🥤 (3) 飲料", name: "蜜香紅茶(冰)", img: "https://placehold.co/300x200?text=Iced+Black+Tea" },
-            { id: "d3_d11", category: "🥤 (3) 飲料", name: "深焙手沖美式咖啡(熱)", img: "https://placehold.co/300x200?text=Hot+Americano" },
-            { id: "d3_d12", category: "🥤 (3) 飲料", name: "深焙手沖美式咖啡(冰)", img: "https://placehold.co/300x200?text=Iced+Americano" },
-            { id: "d3_d13", category: "🥤 (3) 飲料", name: "單品手沖淺焙茉香柚(熱)", img: "https://placehold.co/300x200?text=Hot+Coffee" },
-            { id: "d3_d14", category: "🥤 (3) 飲料", name: "單品手沖淺焙茉香柚(冰)", img: "https://placehold.co/300x200?text=Iced+Coffee" },
-            { id: "d3_d15", category: "🥤 (3) 飲料", name: "原味香草奶昔", img: "https://placehold.co/300x200?text=Vanilla+Shake" },
-            { id: "d3_d16", category: "🥤 (3) 飲料", name: "香蕉奶昔", img: "https://placehold.co/300x200?text=Banana+Shake" },
-            { id: "d3_d17", category: "🥤 (3) 飲料", name: "巧克力奶昔", img: "https://placehold.co/300x200?text=Choco+Shake" }
+            // (2) 主餐 - 餅類
+            { id: "d2_m2_1", category: "🍕 (2) 主餐：餅餅安安套餐", name: "南洋咖哩起司薄餅", img: "https://placehold.co/300x200?text=Curry+Pizza" },
+            { id: "d2_m2_2", category: "🍕 (2) 主餐：餅餅安安套餐", name: "青醬菌菇起司薄餅", img: "https://placehold.co/300x200?text=Pesto+Pizza" },
+            { id: "d2_m2_3", category: "🍕 (2) 主餐：餅餅安安套餐", name: "芋頭金莎起司薄餅", img: "https://placehold.co/300x200?text=Taro+Pizza" },
+
+            // (2-B) 餅類搭配飲料 (必選)
+            { id: "d2_d2_1", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹生茶(熱)", img: "https://placehold.co/300x200?text=Tea+Hot" },
+            { id: "d2_d2_2", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹生茶(冰)", img: "https://placehold.co/300x200?text=Tea+Ice" },
+            { id: "d2_d2_3", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹熟茶(熱)", img: "https://placehold.co/300x200?text=Black+Tea+Hot" },
+            { id: "d2_d2_4", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹熟茶(冰)", img: "https://placehold.co/300x200?text=Black+Tea+Ice" },
+
+            // (3) 甜點
+            { id: "d2_s_1", category: "🍰 (3) 甜點", name: "可麗露", img: "https://placehold.co/300x200?text=Canele" },
+            { id: "d2_s_2", category: "🍰 (3) 甜點", name: "起司馬鈴薯球", img: "https://placehold.co/300x200?text=Potato+Ball" },
+            { id: "d2_s_3", category: "🍰 (3) 甜點", name: "鮮奶麻糬(花生)", img: "https://placehold.co/300x200?text=Mochi+Peanut" },
+            { id: "d2_s_4", category: "🍰 (3) 甜點", name: "鮮奶麻糬(芝麻)", img: "https://placehold.co/300x200?text=Mochi+Sesame" },
+            { id: "d2_s_5", category: "🍰 (3) 甜點", name: "古茶滷味", img: "https://placehold.co/300x200?text=Braised+Dishes" }
+        ],
+        // DAY 3: 打貓廚房 (純文字模式，圖片路徑留空即可，程式會自動隱藏)
+        day3: [
+            { id: "d3_w1", category: "🍗 (1) 打貓雞翅", name: "原味雞翅", img: "" },
+            { id: "d3_w2", category: "🍗 (1) 打貓雞翅", name: "是拉差雞翅", img: "" },
+            { id: "d3_m1", category: "🥪 (2) 主餐", name: "費城牛肉起司三明治", img: "" },
+            { id: "d3_m2", category: "🥪 (2) 主餐", name: "慢烤手撕豬三明治", img: "" },
+            { id: "d3_m3", category: "🥪 (2) 主餐", name: "烤迷迭香雞腿排三明治", img: "" },
+            { id: "d3_d1", category: "🥤 (3) 飲料", name: "可樂", img: "" },
+            { id: "d3_d2", category: "🥤 (3) 飲料", name: "雪碧", img: "" },
+            { id: "d3_d3", category: "🥤 (3) 飲料", name: "手拉生啤", img: "" },
+            { id: "d3_d4", category: "🥤 (3) 飲料", name: "鮮榨柳橙汁", img: "" },
+            { id: "d3_d5", category: "🥤 (3) 飲料", name: "柳橙鳳蘋汁", img: "" },
+            { id: "d3_d6", category: "🥤 (3) 飲料", name: "葡萄柚汁", img: "" },
+            { id: "d3_d7", category: "🥤 (3) 飲料", name: "高山烏龍茶(熱)", img: "" },
+            { id: "d3_d8", category: "🥤 (3) 飲料", name: "高山烏龍茶(冰)", img: "" },
+            { id: "d3_d9", category: "🥤 (3) 飲料", name: "蜜香紅茶(熱)", img: "" },
+            { id: "d3_d10", category: "🥤 (3) 飲料", name: "蜜香紅茶(冰)", img: "" },
+            { id: "d3_d11", category: "🥤 (3) 飲料", name: "深焙手沖美式咖啡(熱)", img: "" },
+            { id: "d3_d12", category: "🥤 (3) 飲料", name: "深焙手沖美式咖啡(冰)", img: "" },
+            { id: "d3_d13", category: "🥤 (3) 飲料", name: "單品手沖淺焙茉香柚(熱)", img: "" },
+            { id: "d3_d14", category: "🥤 (3) 飲料", name: "單品手沖淺焙茉香柚(冰)", img: "" },
+            { id: "d3_d15", category: "🥤 (3) 飲料", name: "原味香草奶昔", img: "" },
+            { id: "d3_d16", category: "🥤 (3) 飲料", name: "香蕉奶昔", img: "" },
+            { id: "d3_d17", category: "🥤 (3) 飲料", name: "巧克力奶昔", img: "" }
         ]
     };
 
-    // 截止時間
     const DEADLINES = {
         day2: new Date('2026-02-20T10:30:00').getTime(),
         day3: new Date('2026-02-21T10:30:00').getTime()
     };
 
-    // Firebase Config
+    // Firebase Init
     const firebaseConfig = {
         apiKey: "AIzaSyC_S8VS1Tgtjdh2eyavGR3jN2BmWF_Etg4",
         authDomain: "tainan-trip-order.firebaseapp.com",
@@ -279,12 +321,12 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // ================== 核心邏輯 ==================
+    // ================== 邏輯區 ==================
     let currentOrders = { day2: {}, day3: {} };
     let adminLockState = { day2: false, day3: false };
     let cachedOrders = {};
 
-    // 1. 初始化家庭選單
+    // 1. 初始化家庭選項
     const selectElem = document.getElementById('user-select');
     FAMILIES.forEach(fam => {
         const opt = document.createElement('option');
@@ -293,15 +335,13 @@
         selectElem.appendChild(opt);
     });
 
-    // 2. 渲染菜單 (含分類標題功能)
+    // 2. 渲染菜單
     function renderMenu(day, containerId) {
         const container = document.getElementById(containerId);
         container.innerHTML = "";
-        
         let lastCategory = "";
 
         MENU_DATA[day].forEach(item => {
-            // 檢查是否需要插入分類標題
             if (item.category && item.category !== lastCategory) {
                 const header = document.createElement('div');
                 header.className = "category-header";
@@ -311,9 +351,14 @@
             }
 
             const col = document.createElement('div');
-            col.className = "col-6 col-md-4 col-lg-3"; // 響應式排版
+            // DAY3 純文字較窄，DAY2 有圖較寬
+            col.className = day === 'day3' ? "col-12 col-md-6" : "col-6 col-md-4 col-lg-3"; 
+            
+            // DAY3 特殊 class (隱藏圖片)
+            const extraClass = day === 'day3' ? 'no-img-card' : '';
+
             col.innerHTML = `
-                <div class="menu-item-card">
+                <div class="menu-item-card ${extraClass}">
                     <img src="${item.img}" class="menu-img" alt="${item.name}">
                     <div class="menu-body">
                         <div class="menu-title">${item.name}</div>
@@ -332,12 +377,9 @@
     renderMenu('day2', 'menu-container-day2');
     renderMenu('day3', 'menu-container-day3');
 
-    // 3. 更新數量
+    // 3. 數量更新
     window.updateQty = function(day, itemId, delta) {
-        if (isDayLocked(day)) {
-            alert("該天已截止點餐，無法修改！");
-            return;
-        }
+        if (isDayLocked(day)) { alert("該天已截止點餐！"); return; }
         if (!currentOrders[day]) currentOrders[day] = {};
 
         let currentQty = currentOrders[day][itemId] || 0;
@@ -346,22 +388,17 @@
 
         currentOrders[day][itemId] = newQty;
         document.getElementById(`qty-${itemId}`).innerText = newQty;
-        
         updateBottomInfo();
     }
 
-    // 4. 更新底部資訊
     function updateBottomInfo() {
         let total = 0;
-        ['day2', 'day3'].forEach(d => {
-            Object.values(currentOrders[d] || {}).forEach(q => total += q);
-        });
-        
+        ['day2', 'day3'].forEach(d => Object.values(currentOrders[d] || {}).forEach(q => total += q));
         const info = document.getElementById('current-selection-info');
         info.innerText = total > 0 ? `目前總計已選 ${total} 份餐點` : "尚未選擇餐點";
     }
 
-    // 5. 鎖定邏輯與倒數 (更新至按鈕內)
+    // 4. 鎖定與倒數
     function isDayLocked(day) {
         const now = new Date().getTime();
         return (DEADLINES[day] - now < 0) || adminLockState[day];
@@ -369,61 +406,60 @@
 
     function updateLockUI() {
         const now = new Date().getTime();
-
         ['day2', 'day3'].forEach(day => {
             const distance = DEADLINES[day] - now;
             const timerElem = document.getElementById(`timer-${day}`);
             const locked = isDayLocked(day);
             const container = document.getElementById(`pills-${day}`);
             
-            // 更新按鈕內的文字
             if (locked) {
-                if (adminLockState[day]) {
-                    timerElem.innerText = "⛔ 管理員已暫停點餐";
-                } else {
-                    timerElem.innerText = "🛑 已截止點餐";
-                }
-                
-                // 鎖定視覺效果
+                timerElem.innerText = adminLockState[day] ? "⛔ 管理員已鎖定" : "🛑 已截止點餐";
                 if (!container.classList.contains('locked-overlay')) {
                     container.classList.add('locked-overlay');
                     container.querySelectorAll('.qty-btn').forEach(b => b.disabled = true);
                 }
             } else {
-                const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                // 分鐘數小於 10 補 0
-                const mm = m < 10 ? '0' + m : m;
-                timerElem.innerText = `⏳ 剩餘 ${d}天 ${h}時 ${mm}分`;
-                
-                // 解鎖
+                const d = Math.floor(distance / (1000*60*60*24));
+                const h = Math.floor((distance % (1000*60*60*24))/(1000*60*60));
+                const m = Math.floor((distance % (1000*60*60))/(1000*60));
+                timerElem.innerText = `⏳ 剩餘 ${d}天 ${h}時 ${m}分`;
                 container.classList.remove('locked-overlay');
                 container.querySelectorAll('.qty-btn').forEach(b => b.disabled = false);
+            }
+
+            // 更新後台按鈕顏色與文字
+            const adminBtn = document.getElementById(`admin-btn-${day}`);
+            if (adminBtn) {
+                if (adminLockState[day]) {
+                    adminBtn.innerText = `⛔ DAY ${day.slice(-1)} 鎖定中 (點擊解鎖)`;
+                    adminBtn.className = "btn btn-danger w-50"; // 紅色
+                } else {
+                    adminBtn.innerText = `✅ DAY ${day.slice(-1)} 開放中 (點擊鎖定)`;
+                    adminBtn.className = "btn btn-success w-50"; // 綠色
+                }
             }
         });
     }
 
-    // Firebase 監聽鎖定
+    // Firebase 監聽
     db.ref('adminSettings').on('value', (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-            adminLockState.day2 = val.day2Locked || false;
-            adminLockState.day3 = val.day3Locked || false;
-        }
+        const val = snapshot.val() || {};
+        adminLockState.day2 = val.day2Locked || false;
+        adminLockState.day3 = val.day3Locked || false;
+        
+        // 更新後台備註欄位
+        if(document.getElementById('note-day2')) document.getElementById('note-day2').value = val.notes?.day2 || "";
+        if(document.getElementById('note-day3')) document.getElementById('note-day3').value = val.notes?.day3 || "";
+        
         updateLockUI();
     });
-
     setInterval(updateLockUI, 1000);
 
     // ================== 資料存取 ==================
 
-    // 載入使用者訂單
     window.loadUserOrder = function() {
         const user = document.getElementById('user-select').value;
         if (!user) return;
-
-        // 重置畫面
         document.querySelectorAll('[id^="qty-"]').forEach(el => el.innerText = "0");
         currentOrders = { day2: {}, day3: {} };
 
@@ -455,17 +491,13 @@
         });
     }
 
-    // 送出訂單
     window.submitOrder = function() {
         const user = document.getElementById('user-select').value;
         if (!user) { alert("請先選擇家庭代號！"); return; }
-
+        
         const d2Str = generateStr('day2');
         const d3Str = generateStr('day3');
-
-        if (!d2Str && !d3Str) {
-            if(!confirm("兩天皆未點餐，確定要送出空白訂單嗎？")) return;
-        }
+        if (!d2Str && !d3Str) { if(!confirm("送出空白訂單？")) return; }
 
         const updates = {};
         if (!isDayLocked('day2')) updates['day2'] = d2Str;
@@ -479,9 +511,8 @@
 
     function generateStr(day) {
         const orders = currentOrders[day];
-        if (!orders) return "";
         let res = [];
-        for (const [id, qty] of Object.entries(orders)) {
+        for (const [id, qty] of Object.entries(orders || {})) {
             if (qty > 0) {
                 const item = MENU_DATA[day].find(m => m.id === id);
                 if (item) res.push(`${item.name} x ${qty}`);
@@ -508,6 +539,12 @@
         db.ref('adminSettings').update({ [`${day}Locked`]: !adminLockState[day] });
     }
 
+    // 儲存備註
+    window.saveAdminNote = function(day) {
+        const note = document.getElementById(`note-${day}`).value;
+        db.ref('adminSettings/notes').update({ [day]: note });
+    }
+
     function initBackend() {
         const list = document.getElementById('all-orders-list');
         db.ref('orders').on('value', sn => {
@@ -518,18 +555,43 @@
             Object.entries(cachedOrders).forEach(([name, d]) => {
                 const div = document.createElement('div');
                 div.className = "card mb-2 p-2";
-                div.innerHTML = `<strong>${name}</strong><br>
-                                 <small class="text-primary">D2: ${d.day2||'-'}</small><br>
-                                 <small class="text-success">D3: ${d.day3||'-'}</small>`;
+                div.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <strong>${name}</strong>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary me-1" onclick="editOrder('${name}')">✏️ 修改</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteOrder('${name}')">🗑️ 刪除</button>
+                        </div>
+                    </div>
+                    <small class="text-primary d-block mt-1">D2: ${d.day2||'-'}</small>
+                    <small class="text-success d-block">D3: ${d.day3||'-'}</small>
+                `;
                 list.appendChild(div);
             });
+            updateLockUI(); // 確保後台按鈕狀態正確
+        });
+    }
 
-            ['day2', 'day3'].forEach(d => {
-                const btn = document.getElementById(`admin-btn-${d}`);
-                const isLocked = adminLockState[d];
-                btn.innerText = isLocked ? `${d.toUpperCase()} 已鎖定 (按此解鎖)` : `${d.toUpperCase()} 開放中 (按此鎖定)`;
-                btn.className = isLocked ? "btn btn-danger w-50" : "btn btn-success w-50";
-            });
+    // 刪除訂單
+    window.deleteOrder = function(userId) {
+        if(confirm(`確定要刪除 ${userId} 的訂單嗎？`)) {
+            db.ref('orders/' + userId).remove();
+        }
+    }
+
+    // 編輯訂單
+    window.editOrder = function(userId) {
+        const order = cachedOrders[userId];
+        const newD2 = prompt(`修改 ${userId} 的 DAY2 訂單內容：`, order.day2 || "");
+        if (newD2 === null) return; // 取消
+        
+        const newD3 = prompt(`修改 ${userId} 的 DAY3 訂單內容：`, order.day3 || "");
+        if (newD3 === null) return; // 取消
+
+        db.ref('orders/' + userId).update({
+            day2: newD2,
+            day3: newD3,
+            lastUpdated: new Date().toLocaleString() + " (管理員修改)"
         });
     }
 
@@ -551,7 +613,6 @@
         h += "</ul>";
         div.innerHTML = h;
     }
-
 </script>
 </body>
 </html>

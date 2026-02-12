@@ -565,6 +565,19 @@
             gameLoop();
         };
         navContainer.appendChild(gameBtn);
+
+        // ★★★ 新增：預先點餐按鈕 ★★★
+        var orderBtn = document.createElement('button');
+        orderBtn.className = 'nav-btn special-btn';
+        // 讓按鈕呈現醒目的橘紅色
+        orderBtn.style.borderColor = "#e67e22";
+        orderBtn.style.color = "#e67e22";
+        orderBtn.innerHTML = '<span>🍜</span>預先點餐';
+        orderBtn.onclick = function() {
+            // 跳轉到 order.html
+            window.location.href = 'order.html';
+        };
+        navContainer.appendChild(orderBtn);
         
         // 初始化後計算一次高度
         setTimeout(adjustContentPadding, 100);
@@ -725,3 +738,4 @@
 
 </body>
 </html>
+

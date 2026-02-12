@@ -10,7 +10,7 @@
         body { font-family: 'Microsoft JhengHei', sans-serif; background-color: #f8f9fa; padding-bottom: 120px; }
         .container { max-width: 900px; margin-top: 20px; }
         
-        /* 一般菜單卡片 (有圖) */
+        /* 統一使用無圖卡片樣式 */
         .menu-item-card { 
             border: 1px solid #ddd; 
             border-radius: 12px; 
@@ -22,21 +22,20 @@
             flex-direction: column;
         }
         .menu-item-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .menu-img { 
-            width: 100%; 
-            height: 160px; 
-            object-fit: cover; 
-            background-color: #f0f0f0;
-        }
         
-        /* DAY3 無圖卡片樣式 */
-        .no-img-card .menu-img { display: none; }
-        .no-img-card .menu-body { padding: 15px; text-align: left; display: flex; align-items: center; justify-content: space-between; }
-        .no-img-card .menu-title { font-size: 1.1rem; margin: 0; }
-        .no-img-card .quantity-control { margin-top: 0; }
-
-        .menu-body { padding: 15px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .menu-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; color: #333; }
+        /* 隱藏所有卡片圖片 */
+        .menu-img { display: none; }
+        
+        /* 調整無圖模式的內距與排列 */
+        .menu-body { 
+            padding: 15px; 
+            text-align: left; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            flex-grow: 1;
+        }
+        .menu-title { font-size: 1.1rem; font-weight: bold; margin: 0; color: #333; flex: 1; }
         
         /* 數量控制器 */
         .quantity-control { 
@@ -44,7 +43,7 @@
             align-items: center; 
             justify-content: center; 
             gap: 10px; 
-            margin-top: auto; 
+            margin-left: 10px;
         }
         .qty-btn { 
             width: 32px; height: 32px; 
@@ -109,7 +108,7 @@
     
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold m-0">🚌 旅遊行程點餐系統</h2>
-        <a href="#" class="btn btn-outline-secondary btn-sm">↩ 返回行程表</a>
+        <a href="https://kyle8362.github.io/Tainan-Trip/" class="btn btn-outline-secondary btn-sm">↩ 返回行程表</a>
     </div>
 
     <div class="card p-4 mb-4 shadow-sm" style="border-left: 5px solid #ffc107;">
@@ -146,8 +145,9 @@
 
             <div id="menu-container-day2" class="row g-3">
                 </div>
+            
             <div class="alert alert-warning mt-3 small">
-                💡 提醒：每一份套餐請務必在下方「搭配飲料」區選擇一份飲品。
+                💡 提醒：每一份套餐請務必在下方「搭配飲料」區選擇一份飲品 (主餐數需等於飲料數)。
             </div>
         </div>
         
@@ -235,47 +235,47 @@
 <script>
     // ================== 設定區 ==================
     
-    // ★★★ 請在此填入您的菜單圖片網址 (Imgur 或 Drive 公開連結) ★★★
-    // 範例使用假圖，請務必更換
+    // ★★★ 您的菜單圖片網址 (Facebook 連結) ★★★
     const MENU_IMG_URL = "https://scontent.ftpe8-1.fna.fbcdn.net/v/t51.82787-15/629702184_18073429154617664_2483133985369412611_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_ohc=i1dwap3YvBoQ7kNvwEU42j9&_nc_oc=AdlaTfoNJPhaeA4I2c3MLNNGpOuPQw-ZkvTrmrl94NKqb3rtYV6KkxChE8RnneX7E9Y&_nc_zt=23&_nc_ht=scontent.ftpe8-1.fna&_nc_gid=BEYxSXBR6YIOsmPzwHfwSQ&oh=00_AfsAqkZX19l-udQ95f1iphVnVXEXM1dcKk1CmwIVJUiE4Q&oe=6993830A"; 
+    
     document.getElementById('modal-menu-img').src = MENU_IMG_URL;
 
     // 家庭代號
     const FAMILIES = ["太平", "玲家", "杏家", "葵家", "Judy家", "Jill家"];
 
-    // 菜單資料
+    // 菜單資料 (圖片欄位已不重要，因為 CSS 統一隱藏)
     const MENU_DATA = {
-        // DAY 2: 弎弌-和茗園 (複雜結構)
+        // DAY 2: 弎弌-和茗園
         day2: [
             // (1) 主餐 - 麵類
-            { id: "d2_m1_1", category: "🍜 (1) 主餐：麵麵俱到套餐", name: "香蔥苦茶油蕎麥麵", img: "https://placehold.co/300x200?text=Noodle+Oil" },
-            { id: "d2_m1_2", category: "🍜 (1) 主餐：麵麵俱到套餐", name: "蕎麥冷麵沾古茶", img: "https://placehold.co/300x200?text=Cold+Noodle" },
+            { id: "d2_m1_1", category: "🍜 (1) 主餐：麵麵俱到套餐", name: "香蔥苦茶油蕎麥麵", img: "" },
+            { id: "d2_m1_2", category: "🍜 (1) 主餐：麵麵俱到套餐", name: "蕎麥冷麵沾古茶", img: "" },
             
-            // (1-B) 麵類搭配飲料 (必選)
-            { id: "d2_d1_1", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹生茶(熱)", img: "https://placehold.co/300x200?text=Tea+Hot" },
-            { id: "d2_d1_2", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹生茶(冰)", img: "https://placehold.co/300x200?text=Tea+Ice" },
-            { id: "d2_d1_3", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹熟茶(熱)", img: "https://placehold.co/300x200?text=Black+Tea+Hot" },
-            { id: "d2_d1_4", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹熟茶(冰)", img: "https://placehold.co/300x200?text=Black+Tea+Ice" },
+            // (1-B) 麵類搭配飲料
+            { id: "d2_d1_1", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹生茶(熱)", img: "" },
+            { id: "d2_d1_2", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹生茶(冰)", img: "" },
+            { id: "d2_d1_3", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹熟茶(熱)", img: "" },
+            { id: "d2_d1_4", category: "🥤 麵麵俱到-搭配飲料 (請選與麵食相同數量)", name: "古樹熟茶(冰)", img: "" },
 
             // (2) 主餐 - 餅類
-            { id: "d2_m2_1", category: "🍕 (2) 主餐：餅餅安安套餐", name: "南洋咖哩起司薄餅", img: "https://placehold.co/300x200?text=Curry+Pizza" },
-            { id: "d2_m2_2", category: "🍕 (2) 主餐：餅餅安安套餐", name: "青醬菌菇起司薄餅", img: "https://placehold.co/300x200?text=Pesto+Pizza" },
-            { id: "d2_m2_3", category: "🍕 (2) 主餐：餅餅安安套餐", name: "芋頭金莎起司薄餅", img: "https://placehold.co/300x200?text=Taro+Pizza" },
+            { id: "d2_m2_1", category: "🍕 (2) 主餐：餅餅安安套餐", name: "南洋咖哩起司薄餅", img: "" },
+            { id: "d2_m2_2", category: "🍕 (2) 主餐：餅餅安安套餐", name: "青醬菌菇起司薄餅", img: "" },
+            { id: "d2_m2_3", category: "🍕 (2) 主餐：餅餅安安套餐", name: "芋頭金莎起司薄餅", img: "" },
 
-            // (2-B) 餅類搭配飲料 (必選)
-            { id: "d2_d2_1", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹生茶(熱)", img: "https://placehold.co/300x200?text=Tea+Hot" },
-            { id: "d2_d2_2", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹生茶(冰)", img: "https://placehold.co/300x200?text=Tea+Ice" },
-            { id: "d2_d2_3", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹熟茶(熱)", img: "https://placehold.co/300x200?text=Black+Tea+Hot" },
-            { id: "d2_d2_4", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹熟茶(冰)", img: "https://placehold.co/300x200?text=Black+Tea+Ice" },
+            // (2-B) 餅類搭配飲料
+            { id: "d2_d2_1", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹生茶(熱)", img: "" },
+            { id: "d2_d2_2", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹生茶(冰)", img: "" },
+            { id: "d2_d2_3", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹熟茶(熱)", img: "" },
+            { id: "d2_d2_4", category: "🥤 餅餅安安-搭配飲料 (請選與薄餅相同數量)", name: "古樹熟茶(冰)", img: "" },
 
             // (3) 甜點
-            { id: "d2_s_1", category: "🍰 (3) 甜點", name: "可麗露", img: "https://placehold.co/300x200?text=Canele" },
-            { id: "d2_s_2", category: "🍰 (3) 甜點", name: "起司馬鈴薯球", img: "https://placehold.co/300x200?text=Potato+Ball" },
-            { id: "d2_s_3", category: "🍰 (3) 甜點", name: "鮮奶麻糬(花生)", img: "https://placehold.co/300x200?text=Mochi+Peanut" },
-            { id: "d2_s_4", category: "🍰 (3) 甜點", name: "鮮奶麻糬(芝麻)", img: "https://placehold.co/300x200?text=Mochi+Sesame" },
-            { id: "d2_s_5", category: "🍰 (3) 甜點", name: "古茶滷味", img: "https://placehold.co/300x200?text=Braised+Dishes" }
+            { id: "d2_s_1", category: "🍰 (3) 甜點", name: "可麗露", img: "" },
+            { id: "d2_s_2", category: "🍰 (3) 甜點", name: "起司馬鈴薯球", img: "" },
+            { id: "d2_s_3", category: "🍰 (3) 甜點", name: "鮮奶麻糬(花生)", img: "" },
+            { id: "d2_s_4", category: "🍰 (3) 甜點", name: "鮮奶麻糬(芝麻)", img: "" },
+            { id: "d2_s_5", category: "🍰 (3) 甜點", name: "古茶滷味", img: "" }
         ],
-        // DAY 3: 打貓廚房 (純文字模式，圖片路徑留空即可，程式會自動隱藏)
+        // DAY 3: 打貓廚房
         day3: [
             { id: "d3_w1", category: "🍗 (1) 打貓雞翅", name: "原味雞翅", img: "" },
             { id: "d3_w2", category: "🍗 (1) 打貓雞翅", name: "是拉差雞翅", img: "" },
@@ -351,15 +351,11 @@
             }
 
             const col = document.createElement('div');
-            // DAY3 純文字較窄，DAY2 有圖較寬
-            col.className = day === 'day3' ? "col-12 col-md-6" : "col-6 col-md-4 col-lg-3"; 
+            // 一律使用純文字排版，電腦版一列兩個
+            col.className = "col-12 col-md-6"; 
             
-            // DAY3 特殊 class (隱藏圖片)
-            const extraClass = day === 'day3' ? 'no-img-card' : '';
-
             col.innerHTML = `
-                <div class="menu-item-card ${extraClass}">
-                    <img src="${item.img}" class="menu-img" alt="${item.name}">
+                <div class="menu-item-card">
                     <div class="menu-body">
                         <div class="menu-title">${item.name}</div>
                         <div class="quantity-control">
@@ -427,15 +423,15 @@
                 container.querySelectorAll('.qty-btn').forEach(b => b.disabled = false);
             }
 
-            // 更新後台按鈕顏色與文字
+            // 更新後台按鈕
             const adminBtn = document.getElementById(`admin-btn-${day}`);
             if (adminBtn) {
                 if (adminLockState[day]) {
                     adminBtn.innerText = `⛔ DAY ${day.slice(-1)} 鎖定中 (點擊解鎖)`;
-                    adminBtn.className = "btn btn-danger w-50"; // 紅色
+                    adminBtn.className = "btn btn-danger w-50"; 
                 } else {
                     adminBtn.innerText = `✅ DAY ${day.slice(-1)} 開放中 (點擊鎖定)`;
-                    adminBtn.className = "btn btn-success w-50"; // 綠色
+                    adminBtn.className = "btn btn-success w-50";
                 }
             }
         });
@@ -447,7 +443,6 @@
         adminLockState.day2 = val.day2Locked || false;
         adminLockState.day3 = val.day3Locked || false;
         
-        // 更新後台備註欄位
         if(document.getElementById('note-day2')) document.getElementById('note-day2').value = val.notes?.day2 || "";
         if(document.getElementById('note-day3')) document.getElementById('note-day3').value = val.notes?.day3 || "";
         
@@ -495,6 +490,32 @@
         const user = document.getElementById('user-select').value;
         if (!user) { alert("請先選擇家庭代號！"); return; }
         
+        // --- 檢核邏輯 ---
+        // 1. 計算 DAY 2 主餐數量
+        let d2MainCount = 0;
+        let d2DrinkCount = 0;
+        const d2Orders = currentOrders['day2'] || {};
+
+        for (const [id, qty] of Object.entries(d2Orders)) {
+            if (qty > 0) {
+                const item = MENU_DATA['day2'].find(m => m.id === id);
+                if (item) {
+                    if (item.category.includes("主餐")) {
+                        d2MainCount += qty;
+                    } else if (item.category.includes("搭配飲料")) {
+                        d2DrinkCount += qty;
+                    }
+                }
+            }
+        }
+
+        // 2. 比對數量 (如果不相等，禁止送出)
+        if (d2MainCount !== d2DrinkCount) {
+            alert(`⚠️ 送出失敗：主餐數量與飲料數量不相符！\n\n您選擇了 ${d2MainCount} 份主餐，但選擇了 ${d2DrinkCount} 份飲料。\n請重新確認調整。`);
+            return;
+        }
+        // --- 檢核結束 ---
+
         const d2Str = generateStr('day2');
         const d3Str = generateStr('day3');
         if (!d2Str && !d3Str) { if(!confirm("送出空白訂單？")) return; }
@@ -539,7 +560,6 @@
         db.ref('adminSettings').update({ [`${day}Locked`]: !adminLockState[day] });
     }
 
-    // 儲存備註
     window.saveAdminNote = function(day) {
         const note = document.getElementById(`note-${day}`).value;
         db.ref('adminSettings/notes').update({ [day]: note });
@@ -568,25 +588,22 @@
                 `;
                 list.appendChild(div);
             });
-            updateLockUI(); // 確保後台按鈕狀態正確
+            updateLockUI();
         });
     }
 
-    // 刪除訂單
     window.deleteOrder = function(userId) {
         if(confirm(`確定要刪除 ${userId} 的訂單嗎？`)) {
             db.ref('orders/' + userId).remove();
         }
     }
 
-    // 編輯訂單
     window.editOrder = function(userId) {
         const order = cachedOrders[userId];
         const newD2 = prompt(`修改 ${userId} 的 DAY2 訂單內容：`, order.day2 || "");
-        if (newD2 === null) return; // 取消
-        
+        if (newD2 === null) return;
         const newD3 = prompt(`修改 ${userId} 的 DAY3 訂單內容：`, order.day3 || "");
-        if (newD3 === null) return; // 取消
+        if (newD3 === null) return;
 
         db.ref('orders/' + userId).update({
             day2: newD2,

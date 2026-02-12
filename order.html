@@ -3,94 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>旅遊行程點餐系統 (圖片版)</title>
+    <title>旅遊行程點餐系統</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <style>
-        body { font-family: 'Microsoft JhengHei', sans-serif; background-color: #f8f9fa; padding-bottom: 80px; }
-        .container { max-width: 800px; margin-top: 20px; }
+        body { font-family: 'Microsoft JhengHei', sans-serif; background-color: #f8f9fa; padding-bottom: 100px; }
+        .container { max-width: 900px; margin-top: 20px; }
         
-        /* 圖片菜單樣式 */
+        /* 圖片菜單卡片樣式 */
         .menu-item-card { 
             border: 1px solid #ddd; 
-            border-radius: 10px; 
+            border-radius: 12px; 
             overflow: hidden; 
             background: white;
             transition: transform 0.2s;
             height: 100%;
+            display: flex;
+            flex-direction: column;
         }
-        .menu-item-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .menu-item-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .menu-img { 
             width: 100%; 
-            height: 150px; 
+            height: 160px; 
             object-fit: cover; 
-            background-color: #eee;
+            background-color: #f0f0f0;
         }
-        .menu-body { padding: 15px; text-align: center; }
+        .menu-body { padding: 15px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .menu-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 10px; color: #333; }
+        
+        /* 數量控制器 */
         .quantity-control { 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            gap: 10px; 
-            margin-top: 10px; 
+            gap: 15px; 
+            margin-top: auto; 
         }
         .qty-btn { 
-            width: 30px; 
-            height: 30px; 
+            width: 35px; 
+            height: 35px; 
             border-radius: 50%; 
             border: 1px solid #ced4da; 
             background: #fff; 
             font-weight: bold;
-            line-height: 28px;
+            font-size: 1.2rem;
+            line-height: 32px;
             padding: 0;
+            color: #0d6efd;
+            transition: all 0.2s;
         }
-        .qty-btn:active { background: #e9ecef; }
+        .qty-btn:active { background: #e9ecef; transform: scale(0.95); }
+        .qty-btn:disabled { color: #ccc; border-color: #eee; cursor: not-allowed; }
+        .qty-display { min-width: 30px; font-weight: bold; font-size: 1.2rem; }
+
+        /* 分類標題樣式 */
+        .category-header {
+            width: 100%;
+            background-color: #e3f2fd;
+            color: #0d6efd;
+            padding: 10px 15px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-left: 5px solid #0d6efd;
+        }
         
-        /* 分頁按鈕樣式 */
+        /* 分頁按鈕樣式 (大按鈕) */
+        .nav-pills { gap: 10px; }
         .nav-pills .nav-link { 
-            border-radius: 50px; 
-            padding: 10px 25px; 
-            font-weight: bold; 
-            margin: 0 5px;
-            color: #6c757d;
+            border-radius: 10px; 
+            padding: 15px; 
             background-color: #e9ecef;
+            color: #495057;
+            border: 2px solid transparent;
+            text-align: center;
         }
         .nav-pills .nav-link.active { 
-            background-color: #0d6efd; 
-            color: white; 
+            background-color: #fff; 
+            color: #0d6efd; 
+            border-color: #0d6efd;
+            box-shadow: 0 4px 6px rgba(13, 110, 253, 0.1);
         }
-        .tab-content { padding: 20px 0; }
-
-        /* 鎖定遮罩 */
-        .locked-overlay {
-            position: relative;
-        }
-        .locked-overlay::after {
-            content: "⛔ 已鎖定無法點餐";
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 255, 255, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+        .timer-text {
+            display: block;
+            font-size: 0.9rem;
+            margin-top: 5px;
             color: #dc3545;
             font-weight: bold;
-            z-index: 10;
-            border-radius: 10px;
         }
 
-        /* 底部固定送出按鈕 */
+        /* 底部固定送出列 */
         .fixed-bottom-bar {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
             padding: 15px;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
             z-index: 1000;
-            text-align: center;
+            border-top: 1px solid #eee;
+        }
+
+        /* 鎖定遮罩 */
+        .locked-overlay { position: relative; opacity: 0.6; pointer-events: none; }
+        .tab-pane.locked-overlay::before {
+            content: "";
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 10;
         }
     </style>
 
@@ -100,29 +123,31 @@
 <body>
 
 <div id="frontend-app" class="container">
-    <h2 class="text-center mb-3">🚌 旅遊行程點餐系統</h2>
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold m-0">🚌 旅遊行程點餐系統</h2>
+        <a href="index.html" class="btn btn-outline-secondary btn-sm">↩ 返回行程表</a>
+    </div>
 
-    <div class="card p-3 mb-3">
-        <label class="form-label fw-bold">🏠 請選擇家庭代號 / 姓名：</label>
+    <div class="card p-4 mb-4 shadow-sm" style="border-left: 5px solid #ffc107;">
+        <label class="form-label fw-bold fs-5">🏠 請先選擇您的家庭代號：</label>
         <select id="user-select" class="form-select form-select-lg" onchange="loadUserOrder()">
             <option value="" disabled selected>-- 請選擇 --</option>
             </select>
     </div>
 
-    <div class="alert alert-info text-center py-2 mb-3">
-        <small class="d-block text-muted">點餐倒數</small>
-        <div class="d-flex justify-content-center gap-4 fw-bold">
-            <span id="timer-day2">DAY 2: 計算中...</span>
-            <span id="timer-day3">DAY 3: 計算中...</span>
-        </div>
-    </div>
-
-    <ul class="nav nav-pills justify-content-center mb-3" id="pills-tab" role="tablist">
+    <ul class="nav nav-pills nav-fill mb-4" id="pills-tab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-day2-tab" data-bs-toggle="pill" data-bs-target="#pills-day2" type="button" role="tab">DAY 2 (2/20)</button>
+            <button class="nav-link w-100 active" id="pills-day2-tab" data-bs-toggle="pill" data-bs-target="#pills-day2" type="button" role="tab">
+                <div class="fs-5 fw-bold">DAY 2 (2/20)<br>弎弌-和茗園</div>
+                <span id="timer-day2" class="timer-text">計算中...</span>
+            </button>
         </li>
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-day3-tab" data-bs-toggle="pill" data-bs-target="#pills-day3" type="button" role="tab">DAY 3 (2/21)</button>
+            <button class="nav-link w-100" id="pills-day3-tab" data-bs-toggle="pill" data-bs-target="#pills-day3" type="button" role="tab">
+                <div class="fs-5 fw-bold">DAY 3 (2/21)<br>打貓廚房</div>
+                <span id="timer-day3" class="timer-text">計算中...</span>
+            </button>
         </li>
     </ul>
 
@@ -139,11 +164,12 @@
     </div>
 
     <div class="fixed-bottom-bar">
-        <div class="container" style="max-width: 800px;">
+        <div class="container" style="max-width: 900px;">
             <div class="d-flex justify-content-between align-items-center mb-2">
-                <span id="current-selection-info" class="text-primary fw-bold small">尚未選擇餐點</span>
+                <span id="current-selection-info" class="text-primary fw-bold">尚未選擇餐點</span>
+                <small class="text-muted" id="status-msg"></small>
             </div>
-            <button onclick="submitOrder()" class="btn btn-primary w-100 btn-lg shadow">確認送出 / 更新訂單</button>
+            <button onclick="submitOrder()" class="btn btn-primary w-100 btn-lg shadow rounded-pill">確認送出 / 更新訂單 ✅</button>
         </div>
     </div>
 
@@ -160,16 +186,16 @@
         </div>
 
         <div class="card p-3 mb-4">
-            <h4>強制鎖定控制</h4>
+            <h4>🔒 鎖定控制</h4>
             <div class="d-flex gap-3">
-                <button id="admin-btn-day2" onclick="toggleAdminLock('day2')" class="btn btn-secondary">讀取中...</button>
-                <button id="admin-btn-day3" onclick="toggleAdminLock('day3')" class="btn btn-secondary">讀取中...</button>
+                <button id="admin-btn-day2" onclick="toggleAdminLock('day2')" class="btn btn-secondary w-50">讀取中...</button>
+                <button id="admin-btn-day3" onclick="toggleAdminLock('day3')" class="btn btn-secondary w-50">讀取中...</button>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-7">
-                <div class="card p-3">
+                <div class="card p-3 mb-3">
                     <h4>📋 各家點餐明細</h4>
                     <div id="all-orders-list" style="max-height: 500px; overflow-y: auto;">載入中...</div>
                 </div>
@@ -177,9 +203,9 @@
             <div class="col-md-5">
                 <div class="card p-3">
                     <h4>📊 數量統計</h4>
-                    <button onclick="calculateTotals('day2')" class="btn btn-warning mb-2 w-100">統計 DAY 2</button>
-                    <button onclick="calculateTotals('day3')" class="btn btn-info w-100">統計 DAY 3</button>
-                    <div id="stats-result" class="mt-3 p-2 border bg-white"></div>
+                    <button onclick="calculateTotals('day2')" class="btn btn-warning mb-2 w-100">統計 DAY 2 (弎弌)</button>
+                    <button onclick="calculateTotals('day3')" class="btn btn-info w-100">統計 DAY 3 (打貓)</button>
+                    <div id="stats-result" class="mt-3 p-2 border bg-white rounded"></div>
                 </div>
             </div>
         </div>
@@ -188,24 +214,48 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // ================== 1. 資料設定區 (請修改這裡) ==================
+    // ================== 1. 資料設定區 ==================
     
-    // 家庭代號清單
-    const FAMILIES = ["王小明家", "陳大文家", "林阿姨", "張三豐", "李四", "測試員"];
+    // 家庭代號清單 (已更新)
+    const FAMILIES = ["太平", "玲家", "杏家", "葵家", "Judy家", "Jill家"];
 
-    // 菜單資料 (圖片請換成真實網址)
-    // 圖片建議比例 4:3 或 1:1
+    // 菜單資料
     const MENU_DATA = {
+        // DAY 2: 弎弌-和茗園 (請在此處填入真實菜單，目前使用範例)
         day2: [
-            { id: "d2_1", name: "招牌牛肉麵", img: "https://placehold.co/300x200?text=Beef+Noodle" },
-            { id: "d2_2", name: "排骨飯", img: "https://placehold.co/300x200?text=Pork+Rice" },
-            { id: "d2_3", name: "雞腿便當", img: "https://placehold.co/300x200?text=Chicken+Rice" },
-            { id: "d2_4", name: "素食炒麵", img: "https://placehold.co/300x200?text=Veggie+Noodle" }
+            { id: "d2_1", category: "主食", name: "招牌餐點範例 A", img: "https://placehold.co/300x200?text=Menu+A" },
+            { id: "d2_2", category: "主食", name: "招牌餐點範例 B", img: "https://placehold.co/300x200?text=Menu+B" },
+            { id: "d2_3", category: "飲品", name: "冷泡茶", img: "https://placehold.co/300x200?text=Tea" }
         ],
+        // DAY 3: 打貓廚房 (已依照您的需求完整建立)
         day3: [
-            { id: "d3_1", name: "海鮮粥", img: "https://placehold.co/300x200?text=Seafood+Congee" },
-            { id: "d3_2", name: "三明治套餐", img: "https://placehold.co/300x200?text=Sandwich" },
-            { id: "d3_3", name: "漢堡+奶茶", img: "https://placehold.co/300x200?text=Burger+Set" }
+            // (1) 打貓雞翅
+            { id: "d3_w1", category: "🍗 (1) 打貓雞翅", name: "原味雞翅", img: "https://placehold.co/300x200?text=Original+Wings" },
+            { id: "d3_w2", category: "🍗 (1) 打貓雞翅", name: "是拉差雞翅", img: "https://placehold.co/300x200?text=Sriracha+Wings" },
+            
+            // (2) 主餐
+            { id: "d3_m1", category: "🥪 (2) 主餐", name: "費城牛肉起司三明治", img: "https://placehold.co/300x200?text=Philly+Cheesesteak" },
+            { id: "d3_m2", category: "🥪 (2) 主餐", name: "慢烤手撕豬三明治", img: "https://placehold.co/300x200?text=Pulled+Pork" },
+            { id: "d3_m3", category: "🥪 (2) 主餐", name: "烤迷迭香雞腿排三明治", img: "https://placehold.co/300x200?text=Rosemary+Chicken" },
+
+            // (3) 飲料
+            { id: "d3_d1", category: "🥤 (3) 飲料", name: "可樂", img: "https://placehold.co/300x200?text=Coke" },
+            { id: "d3_d2", category: "🥤 (3) 飲料", name: "雪碧", img: "https://placehold.co/300x200?text=Sprite" },
+            { id: "d3_d3", category: "🥤 (3) 飲料", name: "手拉生啤", img: "https://placehold.co/300x200?text=Draft+Beer" },
+            { id: "d3_d4", category: "🥤 (3) 飲料", name: "鮮榨柳橙汁", img: "https://placehold.co/300x200?text=Orange+Juice" },
+            { id: "d3_d5", category: "🥤 (3) 飲料", name: "柳橙鳳蘋汁", img: "https://placehold.co/300x200?text=Mixed+Juice" },
+            { id: "d3_d6", category: "🥤 (3) 飲料", name: "葡萄柚汁", img: "https://placehold.co/300x200?text=Grapefruit" },
+            { id: "d3_d7", category: "🥤 (3) 飲料", name: "高山烏龍茶(熱)", img: "https://placehold.co/300x200?text=Hot+Oolong" },
+            { id: "d3_d8", category: "🥤 (3) 飲料", name: "高山烏龍茶(冰)", img: "https://placehold.co/300x200?text=Iced+Oolong" },
+            { id: "d3_d9", category: "🥤 (3) 飲料", name: "蜜香紅茶(熱)", img: "https://placehold.co/300x200?text=Hot+Black+Tea" },
+            { id: "d3_d10", category: "🥤 (3) 飲料", name: "蜜香紅茶(冰)", img: "https://placehold.co/300x200?text=Iced+Black+Tea" },
+            { id: "d3_d11", category: "🥤 (3) 飲料", name: "深焙手沖美式咖啡(熱)", img: "https://placehold.co/300x200?text=Hot+Americano" },
+            { id: "d3_d12", category: "🥤 (3) 飲料", name: "深焙手沖美式咖啡(冰)", img: "https://placehold.co/300x200?text=Iced+Americano" },
+            { id: "d3_d13", category: "🥤 (3) 飲料", name: "單品手沖淺焙茉香柚(熱)", img: "https://placehold.co/300x200?text=Hot+Coffee" },
+            { id: "d3_d14", category: "🥤 (3) 飲料", name: "單品手沖淺焙茉香柚(冰)", img: "https://placehold.co/300x200?text=Iced+Coffee" },
+            { id: "d3_d15", category: "🥤 (3) 飲料", name: "原味香草奶昔", img: "https://placehold.co/300x200?text=Vanilla+Shake" },
+            { id: "d3_d16", category: "🥤 (3) 飲料", name: "香蕉奶昔", img: "https://placehold.co/300x200?text=Banana+Shake" },
+            { id: "d3_d17", category: "🥤 (3) 飲料", name: "巧克力奶昔", img: "https://placehold.co/300x200?text=Choco+Shake" }
         ]
     };
 
@@ -215,7 +265,7 @@
         day3: new Date('2026-02-21T10:30:00').getTime()
     };
 
-    // ================== Firebase 設定 ==================
+    // Firebase Config
     const firebaseConfig = {
         apiKey: "AIzaSyC_S8VS1Tgtjdh2eyavGR3jN2BmWF_Etg4",
         authDomain: "tainan-trip-order.firebaseapp.com",
@@ -229,14 +279,12 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // ================== 全局狀態變數 ==================
-    let currentOrders = { day2: {}, day3: {} }; // 暫存使用者目前的選擇 { "d2_1": 2, "d2_2": 1 }
+    // ================== 核心邏輯 ==================
+    let currentOrders = { day2: {}, day3: {} };
     let adminLockState = { day2: false, day3: false };
-    let currentUserData = null; // 從資料庫讀取的舊資料
+    let cachedOrders = {};
 
-    // ================== 初始化與介面渲染 ==================
-
-    // 1. 產生家庭選單
+    // 1. 初始化家庭選單
     const selectElem = document.getElementById('user-select');
     FAMILIES.forEach(fam => {
         const opt = document.createElement('option');
@@ -245,22 +293,33 @@
         selectElem.appendChild(opt);
     });
 
-    // 2. 渲染菜單卡片
+    // 2. 渲染菜單 (含分類標題功能)
     function renderMenu(day, containerId) {
         const container = document.getElementById(containerId);
         container.innerHTML = "";
         
+        let lastCategory = "";
+
         MENU_DATA[day].forEach(item => {
+            // 檢查是否需要插入分類標題
+            if (item.category && item.category !== lastCategory) {
+                const header = document.createElement('div');
+                header.className = "category-header";
+                header.innerText = item.category;
+                container.appendChild(header);
+                lastCategory = item.category;
+            }
+
             const col = document.createElement('div');
-            col.className = "col-6 col-md-4"; // 手機版一列2個，電腦版一列3個
+            col.className = "col-6 col-md-4 col-lg-3"; // 響應式排版
             col.innerHTML = `
-                <div class="menu-item-card h-100">
+                <div class="menu-item-card">
                     <img src="${item.img}" class="menu-img" alt="${item.name}">
                     <div class="menu-body">
-                        <h6 class="card-title fw-bold mb-2">${item.name}</h6>
+                        <div class="menu-title">${item.name}</div>
                         <div class="quantity-control">
                             <button class="qty-btn" onclick="updateQty('${day}', '${item.id}', -1)">-</button>
-                            <span id="qty-${item.id}" class="fw-bold text-primary fs-5">0</span>
+                            <span id="qty-${item.id}" class="qty-display text-primary">0</span>
                             <button class="qty-btn" onclick="updateQty('${day}', '${item.id}', 1)">+</button>
                         </div>
                     </div>
@@ -273,55 +332,79 @@
     renderMenu('day2', 'menu-container-day2');
     renderMenu('day3', 'menu-container-day3');
 
-    // ================== 核心功能邏輯 ==================
-
-    // 1. 更新數量 (按下 + 或 -)
+    // 3. 更新數量
     window.updateQty = function(day, itemId, delta) {
-        // 檢查鎖定狀態
         if (isDayLocked(day)) {
             alert("該天已截止點餐，無法修改！");
             return;
         }
-        
-        // 確保該天有物件
         if (!currentOrders[day]) currentOrders[day] = {};
 
-        // 計算新數量
         let currentQty = currentOrders[day][itemId] || 0;
         let newQty = currentQty + delta;
         if (newQty < 0) newQty = 0;
 
-        // 更新狀態與畫面
         currentOrders[day][itemId] = newQty;
         document.getElementById(`qty-${itemId}`).innerText = newQty;
         
         updateBottomInfo();
     }
 
-    // 2. 更新底部資訊列
+    // 4. 更新底部資訊
     function updateBottomInfo() {
-        let totalItems = 0;
-        // 計算總數
-        ['day2', 'day3'].forEach(day => {
-            Object.values(currentOrders[day] || {}).forEach(q => totalItems += q);
+        let total = 0;
+        ['day2', 'day3'].forEach(d => {
+            Object.values(currentOrders[d] || {}).forEach(q => total += q);
         });
         
         const info = document.getElementById('current-selection-info');
-        if (totalItems > 0) {
-            info.innerText = `目前已選擇 ${totalItems} 份餐點`;
-        } else {
-            info.innerText = "尚未選擇餐點";
-        }
+        info.innerText = total > 0 ? `目前總計已選 ${total} 份餐點` : "尚未選擇餐點";
     }
 
-    // 3. 判斷某天是否鎖定
+    // 5. 鎖定邏輯與倒數 (更新至按鈕內)
     function isDayLocked(day) {
         const now = new Date().getTime();
-        const timeUp = (DEADLINES[day] - now) < 0;
-        return timeUp || adminLockState[day];
+        return (DEADLINES[day] - now < 0) || adminLockState[day];
     }
 
-    // 4. 監聽 Firebase 鎖定設定 (即時同步)
+    function updateLockUI() {
+        const now = new Date().getTime();
+
+        ['day2', 'day3'].forEach(day => {
+            const distance = DEADLINES[day] - now;
+            const timerElem = document.getElementById(`timer-${day}`);
+            const locked = isDayLocked(day);
+            const container = document.getElementById(`pills-${day}`);
+            
+            // 更新按鈕內的文字
+            if (locked) {
+                if (adminLockState[day]) {
+                    timerElem.innerText = "⛔ 管理員已暫停點餐";
+                } else {
+                    timerElem.innerText = "🛑 已截止點餐";
+                }
+                
+                // 鎖定視覺效果
+                if (!container.classList.contains('locked-overlay')) {
+                    container.classList.add('locked-overlay');
+                    container.querySelectorAll('.qty-btn').forEach(b => b.disabled = true);
+                }
+            } else {
+                const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                // 分鐘數小於 10 補 0
+                const mm = m < 10 ? '0' + m : m;
+                timerElem.innerText = `⏳ 剩餘 ${d}天 ${h}時 ${mm}分`;
+                
+                // 解鎖
+                container.classList.remove('locked-overlay');
+                container.querySelectorAll('.qty-btn').forEach(b => b.disabled = false);
+            }
+        });
+    }
+
+    // Firebase 監聽鎖定
     db.ref('adminSettings').on('value', (snapshot) => {
         const val = snapshot.val();
         if (val) {
@@ -331,150 +414,89 @@
         updateLockUI();
     });
 
-    // 定時器 (每秒更新倒數)
-    setInterval(() => {
-        updateLockUI(); // 同時更新倒數與 UI 狀態
-    }, 1000);
+    setInterval(updateLockUI, 1000);
 
-    function updateLockUI() {
-        const now = new Date().getTime();
+    // ================== 資料存取 ==================
 
-        ['day2', 'day3'].forEach(day => {
-            // 計算倒數
-            const distance = DEADLINES[day] - now;
-            const timerElem = document.getElementById(`timer-${day}`);
-            
-            // 判斷鎖定
-            const locked = isDayLocked(day);
-            const container = document.getElementById(`pills-${day}`); // Tab 內容區
-            
-            // 倒數文字
-            if (locked) {
-                timerElem.innerText = `${day.toUpperCase()}: 已截止`;
-                timerElem.classList.add('text-danger');
-                // 加上遮罩
-                if (!container.classList.contains('locked-overlay')) {
-                    container.classList.add('locked-overlay');
-                    // 鎖定時禁用按鈕 (視覺上)
-                    const btns = container.querySelectorAll('.qty-btn');
-                    btns.forEach(b => b.disabled = true);
-                }
-            } else {
-                const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                timerElem.innerText = `${day.toUpperCase()}: ${d}天${h}時${m}分`;
-                timerElem.classList.remove('text-danger');
-                
-                // 解除遮罩
-                container.classList.remove('locked-overlay');
-                const btns = container.querySelectorAll('.qty-btn');
-                btns.forEach(b => b.disabled = false);
-            }
-        });
-    }
-
-    // ================== 資料讀取與寫入 ==================
-
-    // 1. 讀取使用者舊訂單 (當下拉選單改變時)
+    // 載入使用者訂單
     window.loadUserOrder = function() {
         const user = document.getElementById('user-select').value;
         if (!user) return;
 
-        // 清空畫面數字
+        // 重置畫面
         document.querySelectorAll('[id^="qty-"]').forEach(el => el.innerText = "0");
-        currentOrders = { day2: {}, day3: {} }; // 重置狀態
+        currentOrders = { day2: {}, day3: {} };
 
         db.ref('orders/' + user).once('value').then(snapshot => {
             const data = snapshot.val();
             if (data) {
-                // 解析資料 (資料庫存的是字串 "牛肉麵 x 1, 排骨飯 x 2")
-                // 我們需要反向解析回數字填入 UI
-                parseOrderStringToUI('day2', data.day2);
-                parseOrderStringToUI('day3', data.day3);
+                parseOrderToUI('day2', data.day2);
+                parseOrderToUI('day3', data.day3);
             }
             updateBottomInfo();
         });
     }
 
-    function parseOrderStringToUI(day, orderString) {
-        if (!orderString) return;
-        
-        // 格式範例: "招牌牛肉麵 x 2, 排骨飯 x 1"
-        const items = orderString.split(', ');
+    function parseOrderToUI(day, str) {
+        if (!str) return;
+        const items = str.split(', ');
         items.forEach(part => {
-            // 尋找對應的菜名
-            const menuList = MENU_DATA[day];
-            menuList.forEach(menuItem => {
+            MENU_DATA[day].forEach(menuItem => {
                 if (part.includes(menuItem.name)) {
-                    // 提取數量 (假設格式固定為 "Name x Qty")
                     const parts = part.split(' x ');
                     if (parts.length === 2) {
                         const qty = parseInt(parts[1]);
                         currentOrders[day][menuItem.id] = qty;
-                        const qtyElem = document.getElementById(`qty-${menuItem.id}`);
-                        if(qtyElem) qtyElem.innerText = qty;
+                        const el = document.getElementById(`qty-${menuItem.id}`);
+                        if(el) el.innerText = qty;
                     }
                 }
             });
         });
     }
 
-    // 2. 送出訂單 (轉換回字串格式存檔)
+    // 送出訂單
     window.submitOrder = function() {
         const user = document.getElementById('user-select').value;
         if (!user) { alert("請先選擇家庭代號！"); return; }
 
-        // 產生字串
-        const strDay2 = generateOrderString('day2');
-        const strDay3 = generateOrderString('day3');
+        const d2Str = generateStr('day2');
+        const d3Str = generateStr('day3');
 
-        // 檢查是否全空
-        if (!strDay2 && !strDay3) {
-            if(!confirm("您目前兩天都沒選任何餐點，確定要送出空白訂單嗎？")) return;
+        if (!d2Str && !d3Str) {
+            if(!confirm("兩天皆未點餐，確定要送出空白訂單嗎？")) return;
         }
 
-        // 準備更新資料
         const updates = {};
-        
-        // 只有在「未鎖定」的情況下才允許更新該天資料
-        // 如果 Day2 鎖定了，我們就不送出 Day2 的更新，避免覆蓋舊資料
-        if (!isDayLocked('day2')) updates['day2'] = strDay2;
-        if (!isDayLocked('day3')) updates['day3'] = strDay3;
-        
+        if (!isDayLocked('day2')) updates['day2'] = d2Str;
+        if (!isDayLocked('day3')) updates['day3'] = d3Str;
         updates['lastUpdated'] = new Date().toLocaleString();
 
         db.ref('orders/' + user).update(updates)
-            .then(() => alert("✅ 訂單已成功送出！"))
-            .catch(err => alert("❌ 失敗：" + err.message));
+            .then(() => alert("✅ 訂單更新成功！"))
+            .catch(err => alert("失敗：" + err.message));
     }
 
-    function generateOrderString(day) {
+    function generateStr(day) {
         const orders = currentOrders[day];
         if (!orders) return "";
-        
-        let resultParts = [];
-        // 遍歷所有選到的 ID
-        for (const [itemId, qty] of Object.entries(orders)) {
+        let res = [];
+        for (const [id, qty] of Object.entries(orders)) {
             if (qty > 0) {
-                // 找出菜名
-                const menuItem = MENU_DATA[day].find(m => m.id === itemId);
-                if (menuItem) {
-                    resultParts.push(`${menuItem.name} x ${qty}`);
-                }
+                const item = MENU_DATA[day].find(m => m.id === id);
+                if (item) res.push(`${item.name} x ${qty}`);
             }
         }
-        return resultParts.join(", ");
+        return res.join(", ");
     }
 
-    // ================== 後台相關 JS (保持不變) ==================
+    // ================== 後台 JS ==================
     window.checkAdminPassword = function() {
-        const pwd = prompt("請輸入管理員密碼：");
-        if (pwd === "8888") {
+        if (prompt("密碼：") === "8888") {
             document.getElementById('frontend-app').style.display = 'none';
             document.getElementById('backend-dashboard').style.display = 'block';
-            initBackendData();
-        } else { alert("密碼錯誤"); }
+            initBackend();
+        } else alert("錯誤");
     }
 
     window.logoutBackend = function() {
@@ -483,70 +505,53 @@
     }
 
     window.toggleAdminLock = function(day) {
-        const newStatus = !adminLockState[day];
-        db.ref('adminSettings').update({ [`${day}Locked`]: newStatus });
+        db.ref('adminSettings').update({ [`${day}Locked`]: !adminLockState[day] });
     }
 
-    function initBackendData() {
-        const listContainer = document.getElementById('all-orders-list');
-        db.ref('orders').on('value', snapshot => {
-            listContainer.innerHTML = "";
-            cachedOrders = snapshot.val() || {};
+    function initBackend() {
+        const list = document.getElementById('all-orders-list');
+        db.ref('orders').on('value', sn => {
+            list.innerHTML = "";
+            cachedOrders = sn.val() || {};
+            if(!cachedOrders) { list.innerHTML="無資料"; return; }
             
-            if (Object.keys(cachedOrders).length === 0) {
-                listContainer.innerHTML = "<p>無資料</p>"; return;
-            }
-
-            Object.entries(cachedOrders).forEach(([name, data]) => {
+            Object.entries(cachedOrders).forEach(([name, d]) => {
                 const div = document.createElement('div');
                 div.className = "card mb-2 p-2";
-                div.innerHTML = `<strong>${name}</strong>
-                                 <small>D2: ${data.day2 || '-'}</small>
-                                 <small>D3: ${data.day3 || '-'}</small>`;
-                listContainer.appendChild(div);
+                div.innerHTML = `<strong>${name}</strong><br>
+                                 <small class="text-primary">D2: ${d.day2||'-'}</small><br>
+                                 <small class="text-success">D3: ${d.day3||'-'}</small>`;
+                list.appendChild(div);
             });
-            
-            // 更新後台按鈕狀態
+
             ['day2', 'day3'].forEach(d => {
                 const btn = document.getElementById(`admin-btn-${d}`);
-                if(btn) btn.innerText = adminLockState[d] ? "已鎖定 (按此解鎖)" : "開放中 (按此鎖定)";
-                if(btn) btn.className = adminLockState[d] ? "btn btn-danger" : "btn btn-success";
+                const isLocked = adminLockState[d];
+                btn.innerText = isLocked ? `${d.toUpperCase()} 已鎖定 (按此解鎖)` : `${d.toUpperCase()} 開放中 (按此鎖定)`;
+                btn.className = isLocked ? "btn btn-danger w-50" : "btn btn-success w-50";
             });
         });
     }
 
-    // 後台統計 (字串解析版)
     window.calculateTotals = function(day) {
-        const resultDiv = document.getElementById('stats-result');
+        const div = document.getElementById('stats-result');
         let counts = {};
-        
-        Object.values(cachedOrders).forEach(order => {
-            const str = order[day];
-            if (str) {
-                // 解析 "牛肉麵 x 2, 排骨飯 x 1"
-                const parts = str.split(', ');
-                parts.forEach(p => {
-                    const [name, qtyStr] = p.split(' x ');
-                    if (name && qtyStr) {
-                        const q = parseInt(qtyStr);
-                        counts[name] = (counts[name] || 0) + q;
-                    }
-                });
-            }
+        Object.values(cachedOrders).forEach(o => {
+            const s = o[day];
+            if(s) s.split(', ').forEach(p => {
+                const [n, q] = p.split(' x ');
+                if(n && q) counts[n] = (counts[n]||0) + parseInt(q);
+            });
         });
-
-        let html = `<h6>${day} 統計</h6><ul>`;
-        for (const [n, c] of Object.entries(counts)) {
-            html += `<li>${n}: ${c}</li>`;
+        
+        let h = `<h6>${day.toUpperCase()} 統計</h6><ul class="list-group">`;
+        for(const [n, c] of Object.entries(counts)) {
+            h += `<li class="list-group-item d-flex justify-content-between"><span>${n}</span> <span class="badge bg-primary rounded-pill">${c}</span></li>`;
         }
-        html += "</ul>";
-        resultDiv.innerHTML = html;
+        h += "</ul>";
+        div.innerHTML = h;
     }
-    
-    // 用於後台統計的暫存
-    let cachedOrders = {};
 
 </script>
-
 </body>
 </html>

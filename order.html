@@ -152,15 +152,17 @@
         import { getDatabase, ref, push, set, onValue, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
         // Firebase Config
-        const firebaseConfig = {
-            apiKey: "AIzaSyC_S8VS1Tgtjdh2eyavGR3jN2BmWF_Etg4",
-            authDomain: "tainan-trip-order.firebaseapp.com",
-            projectId: "tainan-trip-order",
-            storageBucket: "tainan-trip-order.firebasestorage.app",
-            messagingSenderId: "171271367128",
-            appId: "1:171271367128:web:91d2cb419a35902dec2aad",
-            measurementId: "G-Y8P3XCTS1Q"
-        };
+       const firebaseConfig = {
+  apiKey: "AIzaSyC_S8VS1Tgtjdh2eyavGR3jN2BmWF_Etg4",
+  authDomain: "tainan-trip-order.firebaseapp.com",
+  // ★★★ 請務必確認有加上這一行，這是您截圖中的資料庫網址 ★★★
+  databaseURL: "https://tainan-trip-order-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "tainan-trip-order",
+  storageBucket: "tainan-trip-order.firebasestorage.app",
+  messagingSenderId: "171271367128",
+  appId: "1:171271367128:web:91d2cb419a35902dec2aad",
+  measurementId: "G-Y8P3XCTS1Q"
+};
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
